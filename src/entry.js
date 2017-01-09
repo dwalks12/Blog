@@ -10,7 +10,7 @@ import shouldUpdateScroll from './utility/shouldUpdateScroll';
 import { useRouterHistory, browserHistory } from 'react-router';
 import App from './App';
 
-import './styling/global.css';
+//import './styling/global.css';
 
 const basename = ``;
 
