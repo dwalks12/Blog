@@ -1,14 +1,14 @@
 {
-  "name": "Eurotrip",
+  "name": "blog",
   "version": "1.0.0",
   "description": "Eurotrip",
   "scripts": {
-    "start": "npm install && node server",
+    "start": "node server",
     "postinstall": "node deploy",
     "production": "NODE_ENV=production webpack -p --config webpack.production.config.js"
   },
   "siteConfig": {
-    "basename": "Dawsons Site",
+    "basename": "blog",
     "country": "en",
     "devPort": "8080"
   },
