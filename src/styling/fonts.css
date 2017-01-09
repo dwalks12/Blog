@@ -1,0 +1,60 @@
+@font-face {
+	font-family: 'futura';
+	src: url('~/src/assets/fonts/FuturaPTHeavy.otf') format('opentype');
+	font-weight: bold;
+	font-style: normal;
+}
+
+@font-face {
+  font-family: 'futura';
+  src: url('~/src/assets/fonts/FuturaPTLight.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'futura';
+  src: url('~/src/assets/fonts/FuturaPTMedium.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*@font-face {
+	font-family: 'citroen';
+	src: url('~fonts/citroen-italic.eot');
+	src: url('~fonts/citroen-italic.eot?#iefix') format('embedded-opentype'),
+			 url('~fonts/citroen-italic.woff2') format('woff2'),
+			 url('~fonts/citroen-italic.woff') format('woff'),
+			 url('~fonts/citroen-italic.ttf') format('truetype'),
+			 url('~fonts/citroen-italic.svg') format('svg');
+	font-weight: normal;
+	font-style: italic;
+}*/
+
+
+
+/*@font-face {
+	font-family: 'citroen';
+	src: url('~fonts/citroen-light-italic.eot');
+	src: url('~fonts/citroen-light-italic.eot?#iefix') format('embedded-opentype'),
+			 url('~fonts/citroen-light-italic.woff2') format('woff2'),
+			 url('~fonts/citroen-light-italic.woff') format('woff'),
+			 url('~fonts/citroen-light-italic.ttf') format('truetype'),
+			 url('~fonts/citroen-light-italic.svg') format('svg');
+	font-weight: 300;
+	font-style: italic;
+}*/
+
+
+
+/*@font-face {
+	font-family: 'citroen';
+	src: url('~fonts/citroen-bold-italic.eot');
+	src: url('~fonts/citroen-bold-italic.eot?#iefix') format('embedded-opentype'),
+			 url('~fonts/citroen-bold-italic.woff2') format('woff2'),
+			 url('~fonts/citroen-bold-italic.woff') format('woff'),
+			 url('~fonts/citroen-bold-italic.ttf') format('truetype'),
+			 url('~fonts/citroen-bold-italic.svg') format('svg');
+	font-weight: bold;
+	font-style: italic;
+}*/

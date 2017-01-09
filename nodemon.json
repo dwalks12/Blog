@@ -1,0 +1,9 @@
+{
+  "verbose": false,
+  "watch": [
+    "webpack",
+    "package.json",
+    ".babelrc"
+  ],
+  "ext": "js json"
+}

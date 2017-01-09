@@ -1,0 +1,32 @@
+@import '~normalize.css/normalize.css';
+@import './fonts.css';
+
+html, body, body * {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	overflow-y: scroll;
+}
+
+a {
+	text-decoration: none;
+}
+
+noscript {
+	display: block;
+	width: 550px;
+	max-width: 90%;
+	margin: 0 auto;
+	padding-top: 2em;
+}
+
+noscript h1 {
+	padding-bottom: 1em;
+}
+
+noscript p {
+	padding-bottom: 0.5em;
+}
