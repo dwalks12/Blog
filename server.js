@@ -10,6 +10,7 @@ var ObjectID = mongodb.ObjectID;
 var cors = require('cors');
 var IMAGES_COLLECTION = 'images';
 var LOGIN_COLLECTION = 'login';
+var POSTS_COLLECTION = 'posts';
 var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
 var publicPath = path.resolve(__dirname, 'public');
@@ -39,7 +40,7 @@ if(!isProduction) {
   });
 }
 var db;
-var DATABASE_URL = process.env.MONGODB_URI ? process.env.MONGODB_URI : 'mongodb://Dawson:Pokemon1@ds127938.mlab.com:27938/heroku_bj9c2mnh';
+var DATABASE_URL = process.env.MONGODB_URI ? process.env.MONGODB_URI : 'mongodb://heroku_w7jv66mf:r5mq77g1dmh4l26ognn3mrqp1v@ds159348.mlab.com:59348/heroku_w7jv66mf';
 
 mongodb.MongoClient.connect(DATABASE_URL, function (err, database) {
   if(err) {

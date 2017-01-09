@@ -36,62 +36,19 @@ export default class AdminPage extends Component {
 
 
   }
-  canUploadImage() {
+  loginSuccess() {
     this.setState({
-      uploadedFile: this.state.stateFile,
       success: false,
       loading: true,
       showModal: false,
     });
-    this.handleImageUpload(this.state.stateFile);
-  }
-  handleImageUpload(file) {
-    let upload = request.post(CLOUDINARY_UPLOAD_URL)
-                        .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-                        .field('file', file);
-
-    upload.end((err, response) => {
-      if (err) {
-        console.error(err);
-      }
-
-      if (response.body.secure_url !== '') {
-        //post the url to database.
-        var postData = {
-          imageUrl: response.body.secure_url,
-          imageid: this.state.uploadedFile.name,
-          createdBy: 'Unknown',//change this eventually
-        }
-        $.ajax({
-          type: 'POST',
-          url: postURL + '/images',
-          data: postData,
-          success: this.handlePostSuccess(this),
-          error: this.handlePostFailure(this),
-          dataType: 'json',
-        });
-
-        this.setState({
-          uploadedFileCloudinaryUrl: response.body.secure_url,
-
-        });
-      }
-    });
+    //go to new page
   }
 
-  handlePostSuccess(data) {
-    console.log(data);
-    if(data) {
-      this.setState({
-        success: true,
-        loading: false,
-      });
-    }
-  }
   handleLoginSuccess(data) {
     console.log(data);
     if(data) {
-      this.canUploadImage();
+      this.loginSuccess();
     }
   }
   handleLoginFailure(error) {
@@ -106,10 +63,7 @@ export default class AdminPage extends Component {
       });
     }, 800);
   }
-  handlePostFailure(error) {
-    console.log(error);
 
-  }
   updateUsernameValue(e) {
     this.setState({
       usernameInput: e.target.value,
@@ -156,8 +110,9 @@ export default class AdminPage extends Component {
 	render() {
     const loadingSpinner = <div style={{display: this.state.loading ? 'inline-block' : 'none'}} className={css(styles.gradientWrapper)}>{'Uploading Image'}</div>
     const CheckAuthModal = <section className={css(styles.modalContainer)} style={{display: this.state.showModal ? 'block' : 'none'}}>
-      <div className={css(styles.closeIcon)} onClick={() => this.closeModal()}></div>
+
       <div className={css(styles.modalContent, this.state.incorrect ? styles.incorrectParams : '')}>
+        <div className={css(styles.closeIcon)} onClick={() => this.closeModal()}></div>
         <h1 style={{marginBottom: '20px', marginTop: '25px'}}>{'Enter Login Credentials'}</h1>
         <input value={this.state.usernameInput} onChange={this.updateUsernameValue.bind(this)} className={css(styles.inputField)} placeholder={'Username'} type='text'></input>
         <input value={this.state.passwordInput} onChange={this.updatePasswordValue.bind(this)} className={css(styles.inputField)} placeholder={'Password'} type='password'></input>
@@ -168,27 +123,6 @@ export default class AdminPage extends Component {
 			<div>
 				<Helmet title='EuroTrip 2016 Upload Images' />
         {CheckAuthModal}
-				<div className={css(styles.dealerMetaContainer)}>
-					<h1 style={{fontFamily: 'futura'}}>{'Import Your image here'}</h1>
-				</div>
-        <div className={css(styles.imageDropArea)}>
-				<Dropzone
-          className={css(styles.increasedWidth)}
-          multiple={false}
-          accept="image/*"
-          onDrop={this.onImageDrop.bind(this)}>
-          <p style={{marginBottom: '20px', fontFamily: 'futura'}} className={css(styles.centerAlign)}>{'Drop your image here or click here to select a file to upload.'}</p>
-        </Dropzone>
-        </div>
-        {loadingSpinner}
-        <div style={{marginBottom: '20px'}} >
-          <p className={css(styles.centered)} style={{display: this.state.success ? 'block' : 'none' }}> {'Image successfully uploaded'}</p>
-        </div>
-        <div className={css(styles.centered)} style={{display: this.state.success ? 'block' : 'none'}}>
-          <img className={css(styles.postedImage)} src={this.state.uploadedFileCloudinaryUrl} />
-        </div>
-				<div className={css(styles.paddingTop)}>
-				</div>
 			</div>
 		);
 	}
@@ -201,7 +135,7 @@ const styles = StyleSheet.create({
     left: '0',
     overflow: 'auto',
     zIndex: '1000',
-    background: 'rgba(0, 0, 0, 0.5)',
+    background: 'rgba(0, 0, 0, 1)',
     width: '100%',
     height: '100%',
 
@@ -238,9 +172,9 @@ const styles = StyleSheet.create({
     animationIterationCount: '2',
   },
   closeIcon: {
-    position: 'absolute',
-    top: '19%',
-    left: '90%',
+    position: 'relative',
+    top: '0%',
+    left: '98%',
     display:'block',
     boxSizing:'border-box',
     width:'20px',
@@ -260,10 +194,10 @@ const styles = StyleSheet.create({
       animationIterationCount: 'infinite',
     },
     [`@media (max-width: ${ breakpoints.smMin }px)`]: {
-			top: '2%',
+			top: '0%',
 		},
     [`@media (max-width: ${ breakpoints.mdMin }px)`]: {
-			top: '12%',
+			top: '0%',
 		},
 
   },
