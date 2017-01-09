@@ -113,7 +113,7 @@ export default class AdminPage extends Component {
 
       <div className={css(styles.modalContent, this.state.incorrect ? styles.incorrectParams : '')}>
         <div className={css(styles.closeIcon)} onClick={() => this.closeModal()}></div>
-        <h1 style={{marginBottom: '20px', marginTop: '25px'}}>{'Enter Login Credentials'}</h1>
+        <h1 style={{marginBottom: '20px', marginTop: '25px', fontFamily: 'futura'}}>{'Enter Login Credentials'}</h1>
         <input value={this.state.usernameInput} onChange={this.updateUsernameValue.bind(this)} className={css(styles.inputField)} placeholder={'Username'} type='text'></input>
         <input value={this.state.passwordInput} onChange={this.updatePasswordValue.bind(this)} className={css(styles.inputField)} placeholder={'Password'} type='password'></input>
         <div className={css(styles.submitButton)} onClick={() => this.submitLoginCredentials()}>Submit</div>
@@ -121,7 +121,7 @@ export default class AdminPage extends Component {
     </section>
 		return (
 			<div>
-				<Helmet title='EuroTrip 2016 Upload Images' />
+				<Helmet title='Admin'/>
         {CheckAuthModal}
 			</div>
 		);
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
 
   },
   submitButton: {
+    fontFamily: 'futura',
     cursor: 'pointer',
     width: '200px',
     height: '40px',
@@ -156,6 +157,8 @@ const styles = StyleSheet.create({
     }
   },
   inputField: {
+    fontFamily: 'futura',
+    fontSize: '20px',
     borderWidth: '3px',
     margin: 'auto',
     width: '80%',
