@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Eurotrip",
   "scripts": {
-    "start": "node server",
+    "start": "npm install && node server",
     "postinstall": "node deploy",
     "production": "NODE_ENV=production webpack -p --config webpack.production.config.js"
   },
