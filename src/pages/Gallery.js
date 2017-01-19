@@ -7,6 +7,7 @@ import {merge,swing,rollOut,rotateIn, rotateOut, pulse,shake, flash, bounce, rub
 import $ from 'jquery';
 const closeanimation = merge(rotateOut, rotateIn);
 const animation = merge(rotateOut, rotateIn);
+const URLS = require('../../models/config.js');
 const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
 //const postURL = 'https://beverlywalker.herokuapp.com'; // for local testing.'http://localhost:3000';//
 export default class GalleryPage extends Component {
