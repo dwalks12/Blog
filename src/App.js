@@ -25,7 +25,7 @@ export default class App extends Component {
 
 	constructor(props) {
 		super(props);
-
+		
 		window._data = window._data || {};
 	}
 
@@ -47,6 +47,9 @@ export default class App extends Component {
 					<Route path='gallery' getComponent={page('Gallery')}/>
 					<Route path='404' getComponent={page('404')} />
 					<Route path='admin' getComponent={page('Admin')}/>
+					<Route path='content' getComponent={page('ContentPage')}/>
+					<Route path='content/addPage' getComponent={page('AddPage')}/>
+					<Route path='content/blogPost' getComponent={page('BlogPost')}/>
 					// { PageRoutes }
 
 					<Redirect from='**' to='404' />

@@ -166,7 +166,7 @@ export default class ImagePage extends Component {
     </section>
 		return (
 			<div>
-				<Helmet title='EuroTrip 2016 Upload Images' />
+				<Helmet title='Blog' />
         {CheckAuthModal}
 				<div className={css(styles.dealerMetaContainer)}>
 					<h1 style={{fontFamily: 'futura'}}>{'Import Your image here'}</h1>
@@ -205,6 +205,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
 
+  },
+  loading: {
+    width: '30px',
+    height: '30px',
   },
   submitButton: {
     cursor: 'pointer',

@@ -3,15 +3,17 @@ import { StyleSheet, css } from '../styling/index.js';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import { browserHistory } from 'react-router'
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import {merge,swing,rollOut,rotateIn, rotateOut, pulse,shake, flash, bounce, rubberBand, jello} from 'react-animations';
 import $ from 'jquery';
+var bcrypt = require('bcrypt-nodejs');
 const animation = merge(flash, shake);
 const closeanimation = merge(rotateOut, rotateIn);
 const CLOUDINARY_UPLOAD_PRESET = 'upload';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload';
-const postURL = 'https://beverlywalker.herokuapp.com'; //'http://localhost:3000'; for local testing.
-
+const postURL =  'http://localhost:3000';//'https://beverlywalker.herokuapp.com'; //'http://localhost:3000'; for local testing.
+import appHistory from '../utility/app_history';
 
 export default class AdminPage extends Component {
   constructor(props) {
@@ -28,33 +30,30 @@ export default class AdminPage extends Component {
       stateFile: {},
     };
   }
-  onImageDrop(files) {
-    this.setState({
-      showModal: true,
-      stateFile: files[0],
-    });
-
-
-  }
   loginSuccess() {
     this.setState({
       success: false,
-      loading: true,
+      loading: false,
       showModal: false,
     });
+
+    appHistory.replace('/content');
     //go to new page
   }
 
   handleLoginSuccess(data) {
+    console.log(data.token);
     console.log(data);
     if(data) {
+
+      sessionStorage.setItem('jwtToken', data.token);
       this.loginSuccess();
     }
   }
   handleLoginFailure(error) {
-    console.log(error);
     this.setState({
       incorrect: true,
+      loading: false,
     });
     var that = this;
     setTimeout(function(){
@@ -75,7 +74,14 @@ export default class AdminPage extends Component {
     });
   }
   submitLoginCredentials() {
+    this.setState({
+      loading: true,
+    });
     if(this.state.usernameInput.length > 0 && this.state.passwordInput.length > 0) {
+      // var hashedPassword = bcrypt.hashSync(this.state.passwordInput, null, null, function(err, hash) {
+      //             if(err) return 'error';
+      //             return hash;
+      //           });
       var postData = {
         username: this.state.usernameInput,
         password: this.state.passwordInput,
@@ -105,10 +111,10 @@ export default class AdminPage extends Component {
   closeModal() {
     this.setState({
       showModal: false,
-    })
+    });
   }
 	render() {
-    const loadingSpinner = <div style={{display: this.state.loading ? 'inline-block' : 'none'}} className={css(styles.gradientWrapper)}>{'Uploading Image'}</div>
+    const loadingSpinner = this.state.loading ? <span><img className={css(styles.loading)} src='../images/loading.gif'/></span> : 'Submit';
     const CheckAuthModal = <section className={css(styles.modalContainer)} style={{display: this.state.showModal ? 'block' : 'none'}}>
 
       <div className={css(styles.modalContent, this.state.incorrect ? styles.incorrectParams : '')}>
@@ -116,7 +122,7 @@ export default class AdminPage extends Component {
         <h1 style={{marginBottom: '20px', marginTop: '25px', fontFamily: 'futura'}}>{'Enter Login Credentials'}</h1>
         <input value={this.state.usernameInput} onChange={this.updateUsernameValue.bind(this)} className={css(styles.inputField)} placeholder={'Username'} type='text'></input>
         <input value={this.state.passwordInput} onChange={this.updatePasswordValue.bind(this)} className={css(styles.inputField)} placeholder={'Password'} type='password'></input>
-        <div className={css(styles.submitButton)} onClick={() => this.submitLoginCredentials()}>Submit</div>
+        <div className={css(styles.submitButton)} onClick={() => this.submitLoginCredentials()}>{loadingSpinner}</div>
       </div>
     </section>
 		return (
@@ -139,6 +145,10 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
 
+  },
+  loading: {
+    width: '30px',
+    height: '30px',
   },
   submitButton: {
     fontFamily: 'futura',
@@ -213,7 +223,7 @@ const styles = StyleSheet.create({
     height: '400px',
     textAlign: 'center',
     [`@media (max-width: ${ breakpoints.mdMin }px)`]: {
-			width: '100%',
+			width: '85% !important',
 		},
   },
 	dealerMetaContainer: {
@@ -232,78 +242,5 @@ const styles = StyleSheet.create({
     width: '80px',
     height: '80px',
   },
-  gradientWrapper: {
-    animationName: animation,
-    animationDuration: '5s',
-    animationIterationCount: 'infinite',
-    textAlign: 'center',
-    margin: 'auto',
-    width: '100%',
-  },
-  increasedWidth: {
-    width: '100%',
-    height: '200px',
-    borderStyle: 'dashed',
-    borderWidth: '5px',
-    [`@media (max-width: ${ breakpoints.mdMin }px)`]: {
-			width: '80%',
-      margin: 'auto',
-		},
-  },
-  centered: {
-    margin: 'auto',
-    marginTop: '70px',
-    marginBottom: '70px',
-    textAlign: 'center',
-  },
-  centerAlign: {
-    margin: 'auto',
-    marginTop: '70px',
-    width: '80%',
-  },
-  postedImage: {
-    margin: 'auto',
-    textAlign: 'center',
-    objectFit: 'cover',
-    overflow: 'hidden',
-    width: '300px',
-    height: '300px',
-    borderStyle: 'solid',
-    borderColor: 'black',
-    borderWidth: '5px',
-  },
-  imageDropArea: {
-    width: '450px',
-    height: '200px',
-    margin: 'auto',
-    textAlign: 'center',
-    marginBottom: '20px',
-    marginTop: '20px',
-    cursor: 'pointer',
-    [`@media (max-width: ${ breakpoints.mdMin }px)`]: {
-      width: '100%',
-    },
-  },
-	bannerImage: {
-		height: 'auto',
-		width: 'auto',
-		maxHeight: '600px',
-	},
-	carouselContainer: {
-		position: 'relative',
-	},
-	paddingTop: {
-		paddingTop: 0,
-	},
-	gridCarText: {
-		fontWeight: 'normal',
-		textAlign: 'center',
-		width: '70%',
-		paddingBottom: '1.5625em',
-		margin: 'auto',
-	},
-	padding: {
-		paddingTop: '0.725em',
-	},
 
 });

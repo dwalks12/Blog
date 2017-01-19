@@ -161,7 +161,7 @@ export default class GalleryPage extends Component {
     </section>
 		return (
 			<div>
-				<Helmet title='EuroTrip 2016' />
+				<Helmet title='Gallery' />
         {CheckAuthModal}
 				<div className={css(styles.centerItems)}>
           {images}

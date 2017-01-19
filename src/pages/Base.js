@@ -30,6 +30,10 @@ export default class Base extends Component {
 	componentDidMount() {
 		const html = document.getElementsByTagName('html')[0];
 		html.className = (html.className + ' ' + css(styles.html)).trim();
+		console.log(this.props.location.pathname);
+		if(this.props.location.pathname.indexOf('/content') >=0) {
+			this.changeMenuState();
+		}
 	}
 
 	componentWillUnmount() {
@@ -37,7 +41,28 @@ export default class Base extends Component {
 		html.className = html.className.replace(css(styles.html), '').trim();
 
 	}
-
+	changeMenuState() {
+		this.setState({
+			menuOpen: true,
+		});
+	}
+	renderAdminPage() {
+		return <div>
+				<Link
+					className={css(styles.menuItem)}
+					to={'/content/addPage'}>
+					{'Add Page'}
+				</Link>
+				<Link
+					className={css(styles.menuItem)}
+					to={'/content/blogPost'}>
+					{'Blog Posts'}
+				</Link>
+				<div className={css(styles.content)}>
+					{this.props.children}
+				</div>
+			</div>
+	}
 	renderPage() {
 		return <div>
 			<div className={css(styles.top)}>
@@ -70,7 +95,7 @@ export default class Base extends Component {
 			<div className={css(styles.base)}>
 				<FontLoader fonts={webFonts} />
 				<Helmet
-					titleTemplate={'%s - EuroTrip 2016'}
+					titleTemplate={'%s'}
 					meta={[
 						{ 'name': 'description', 'content': 'website description' },
 					]}
@@ -78,7 +103,7 @@ export default class Base extends Component {
 
 				{ this.state.menuOpen
 					?
-							<div>{'menu open'}</div>
+							this.renderAdminPage()
 					: this.renderPage()
 				}
 				<div className={css(styles.footer)}>

@@ -9,7 +9,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 import shouldUpdateScroll from './utility/shouldUpdateScroll';
 import { useRouterHistory, browserHistory } from 'react-router';
 import App from './App';
-
+import appHistory from './utility/app_history';
 //import './styling/global.css';
 
 const basename = ``;
@@ -19,9 +19,8 @@ const basename = ``;
 // 	shouldUpdateScroll,
 // });
 // const history = useBasename(createHistory)({basename});
-const history = useRouterHistory(createHashHistory)({queryKey: false});
+const history = appHistory;//useRouterHistory(createHashHistory)({queryKey: false});
 const root = document.getElementById('root');
-
 const render = () => {
 	const WrappedApp = () =>
 		<div>
