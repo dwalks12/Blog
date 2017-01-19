@@ -30,7 +30,6 @@ export default class Base extends Component {
 	componentDidMount() {
 		const html = document.getElementsByTagName('html')[0];
 		html.className = (html.className + ' ' + css(styles.html)).trim();
-		console.log(this.props.location.pathname);
 		if(this.props.location.pathname.indexOf('/content') >=0) {
 			this.changeMenuState();
 		}

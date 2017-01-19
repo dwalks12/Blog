@@ -12,7 +12,7 @@ const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload'
 //const postURL =  'https://beverlywalker.herokuapp.com'; //'http://localhost:3000';
 const URLS = require('../../models/config.js');
 const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
-export default class AddPage extends Component {
+export default class EditPage extends Component {
 	static propTypes = {}
 
   constructor(props) {
@@ -42,22 +42,7 @@ export default class AddPage extends Component {
     } else {
       appHistory.replace('/admin');
     }
-    var preSelectedId = this.getParameterByName('id');
-    if(preSelectedId && preSelectedId.length > 0) {
-      console.log(preSelectedId);
-    }
 
-  }
-  getParameterByName(name, url) {
-    if (!url) {
-      url = window.location.href;
-    }
-    name = name.replace(/[\[\]]/g, "\\$&");
-    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-        results = regex.exec(url);
-    if (!results) return null;
-    if (!results[2]) return '';
-    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
   onImageDrop(files) {
     // console.log(files);
@@ -155,7 +140,6 @@ export default class AddPage extends Component {
     const successDiv = this.state.success ? <div onClick={() => this.removeSuccessView() } style={{width: '300px', height: '100px', position: 'absolute', right: '0', top: '80px', backgroundColor: 'rgba(141, 198, 63, 0.8)', cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.5) 2px 2px 2px'}}><p style={{color: 'white', fontFamily: 'futura', fontSize: '20px', paddingLeft: '10px', paddingRight: '10px'}}>{'Successfully uploaded new blog post'}</p></div> : <div></div>
     const errorDiv = this.state.error ? <div onClick={() => this.removeErrorView() } style={{width: '300px', height: '100px', position: 'absolute', right: '0', top: '80px', backgroundColor: 'rgba(187, 32, 36, 0.8)', cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.5) 2px 2px 2px'}}><p style={{color: 'white', fontFamily: 'futura', fontSize: '20px', paddingLeft: '10px', paddingRight: '10px'}}>{'There was an error uploading post'}</p></div> : <div></div>
     //error color: rgba(187, 32, 36, 0.8)
-    const showImage = this.state.imageUrl ? <img className={css(styles.downloadedImage)} src={this.state.imageUrl} /> : <p style={{marginBottom: '20px', fontFamily: 'futura'}} className={css(styles.centerAlign)}>{'Drop your image here or click here to select a file to upload.'}</p>
 		return (
 			<div>
 				<Helmet title='ContentPage' />
@@ -169,8 +153,7 @@ export default class AddPage extends Component {
             multiple={false}
             accept="image/*"
             onDrop={this.onImageDrop.bind(this)}>
-            {showImage}
-
+            <p style={{marginBottom: '20px', fontFamily: 'futura'}} className={css(styles.centerAlign)}>{'Drop your image here or click here to select a file to upload.'}</p>
           </Dropzone>
           </div>
           {/* insert drop image here/ import */}
@@ -196,12 +179,6 @@ export default class AddPage extends Component {
 }
 
 const styles = StyleSheet.create({
-  downloadedImage: {
-    objectFit: 'cover',
-    overflow: 'hidden',
-    width: '100%',
-    height: '100%',
-  },
   submitButton: {
     fontFamily: 'futura',
     cursor: 'pointer',
@@ -220,7 +197,7 @@ const styles = StyleSheet.create({
   },
   bodyTextBox: {
     width: '80%',
-    height: '400px',
+    height: 'auto',
     textAlign: 'center',
     fontFamily: 'futura',
     fontSize: '20px',
