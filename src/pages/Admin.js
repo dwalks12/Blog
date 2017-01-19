@@ -15,6 +15,7 @@ const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload'
 //const postURL =  'https://beverlywalker.herokuapp.com'; //'http://localhost:3000'; for local testing.
 const URLS = require('../../models/config.js');
 const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
+console.log(process.env.NODE_ENV);
 import appHistory from '../utility/app_history';
 
 export default class AdminPage extends Component {
