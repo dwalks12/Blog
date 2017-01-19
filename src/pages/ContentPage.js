@@ -5,7 +5,8 @@ import LazyLoad from 'react-lazy-load';
 import $ from 'jquery';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import appHistory from '../utility/app_history';
-const postURL =  'http://localhost:3000';
+//const postURL = 'https://beverlywalker.herokuapp.com'; // 'http://localhost:3000';
+const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 
 export default class ContentPage extends Component {

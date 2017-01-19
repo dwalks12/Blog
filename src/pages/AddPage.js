@@ -9,8 +9,8 @@ import Dropzone from 'react-dropzone';
 import request from 'superagent';
 const CLOUDINARY_UPLOAD_PRESET = 'upload';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload';
-const postURL =  'http://localhost:3000';
-
+//const postURL =  'https://beverlywalker.herokuapp.com'; //'http://localhost:3000';
+const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
 export default class ContentPage extends Component {
 	static propTypes = {}
 

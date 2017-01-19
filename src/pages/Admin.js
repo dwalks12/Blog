@@ -12,7 +12,8 @@ const animation = merge(flash, shake);
 const closeanimation = merge(rotateOut, rotateIn);
 const CLOUDINARY_UPLOAD_PRESET = 'upload';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload';
-const postURL =  'http://localhost:3000';//'https://beverlywalker.herokuapp.com'; //'http://localhost:3000'; for local testing.
+//const postURL =  'https://beverlywalker.herokuapp.com'; //'http://localhost:3000'; for local testing.
+const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
 import appHistory from '../utility/app_history';
 
 export default class AdminPage extends Component {
