@@ -53,10 +53,30 @@ export default class ContentPage extends Component {
     }
 
   }
+  deleteBlogPost(id, index) {
+    $.ajax({
+      type: 'DELETE',
+      url: postURL+ '/posts/' + id,
+      success: this.handleDeleteSuccess.bind(this, this.state.imageIndex),
+      error: this.handleDeleteError.bind(this),
+      dataType: 'json',
+    });
+  }
+  handleDeleteSuccess(theIndex) {
+    var tempArray = this.state.blogPosts.filter(function(el, index) {
+      return index !== theIndex;
+    });
+    this.setState({
+      blogPosts: tempArray,
+    });
+  }
+  handleDeleteError() {
+    console.log('blog delete error');
+  }
 	render() {
     const blogs = this.state.blogPosts.length > 0 ? this.state.blogPosts.map((item, index) => {
       console.log(item.imageUrl, item);
-      return <div key={item.id}><LazyLoad><img src={item.imageUrl} key={item.imageid} /></LazyLoad><h1>{item.title}</h1><p style={{wordWrap: 'break-word', whiteSpace: 'pre'}}>{item.body}</p><div>{'Edit'}</div></div>
+      return <div key={item.id}><LazyLoad><img src={item.imageUrl} key={item.imageid} /></LazyLoad><h1>{item.title}</h1><p style={{wordWrap: 'break-word', whiteSpace: 'pre'}}>{item.body}</p><div onClick={() => this.deleteBlogPost(item.imageid, index)}>{'Delete'}</div></div>
     }) : <div></div>;
 
 		return (
