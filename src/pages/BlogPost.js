@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import appHistory from '../utility/app_history';
 const URLS = require('../../models/config.js');
-const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
+const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 
 export default class ContentPage extends Component {

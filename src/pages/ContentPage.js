@@ -7,7 +7,7 @@ import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import appHistory from '../utility/app_history';
 //const postURL = 'https://beverlywalker.herokuapp.com'; // 'http://localhost:3000';
 const URLS = require('../../models/config.js');
-const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
+const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 
 export default class ContentPage extends Component {

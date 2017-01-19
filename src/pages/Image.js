@@ -11,7 +11,7 @@ const closeanimation = merge(rotateOut, rotateIn);
 const CLOUDINARY_UPLOAD_PRESET = 'upload';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload';
 const URLS = require('../../models/config.js');
-const postURL = process.env.NODE_ENV === 'production' ? URLS.globalUrl : URLS.testUrl;
+const postURL = URLS.globalUrl;
 
 export default class ImagePage extends Component {
   constructor(props) {
