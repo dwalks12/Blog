@@ -188,6 +188,15 @@ app.delete('/posts/:id', function(req, res) {
     }
   })
 });
+app.get('/posts/:id', function(req, res) {
+  db.collection(POSTS_COLLECTION).findOne({id: req.params.id}, function(err, results) {
+    if(err) {
+      handleError(res, err.message, 'Could not find Post');
+    } else {
+      res.status(201).json(results);
+    }
+  });
+});
 app.post('/images', function(req, res) {
   var newImage = req.body;
   newImage.createdAt = new Date();

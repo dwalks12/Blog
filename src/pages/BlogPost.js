@@ -9,7 +9,7 @@ const URLS = require('../../models/config.js');
 const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 
-export default class ContentPage extends Component {
+export default class BlogPost extends Component {
 	static propTypes = {
     postId: PropTypes.string,
   }
@@ -22,16 +22,9 @@ export default class ContentPage extends Component {
     //console.log('the session token is ', sessionStorage.getItem('jwtToken'));
 
   }
-  handleContentSuccess(data) {
-    console.log(data);
-    this.setState({
-      blogPosts: data,
-    })
-  }
-  handleContentFailure(data) {
 
-  }
   componentDidMount() {
+
     if(sessionStorage.getItem('jwtToken')) {
       if(!isTokenExpired(sessionStorage.getItem('jwtToken'))) {
         $.ajax({
@@ -51,6 +44,37 @@ export default class ContentPage extends Component {
     } else {
       appHistory.replace('/admin');
     }
+
+  }
+  componentWillUnmount() {
+    this.setState({
+      blogPosts: [],
+    })
+  }
+  handleContentSuccess(data) {
+    this.setState({
+      blogPosts: data,
+    })
+  }
+  handleContentFailure(data) {
+
+  }
+  editBlogPost(id) {
+    $.ajax({
+      type: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+      },
+      url: postURL + '/posts/' + id,
+      success: this.handleEditSuccess.bind(this),
+      error: this.handleEditError.bind(this),
+      dataType: 'json',
+    });
+  }
+  handleEditSuccess(data) {
+    appHistory.replace('/content/addPage?id=' + data.id);
+  }
+  handleEditError() {
 
   }
   deleteBlogPost(id, index) {
@@ -78,7 +102,15 @@ export default class ContentPage extends Component {
   }
 	render() {
     const blogs = this.state.blogPosts.length > 0 ? this.state.blogPosts.map((item, index) => {
-      return <div key={item.id}><LazyLoad><img src={item.imageUrl} key={item.imageid} /></LazyLoad><h1>{item.title}</h1><p style={{wordWrap: 'break-word', whiteSpace: 'pre'}}>{item.body}</p><div onClick={() => this.deleteBlogPost(item.id, index)}>{'Delete'}</div></div>
+      return (<div key={item.id}>
+              <LazyLoad>
+                <img src={item.imageUrl} key={item.imageid} />
+              </LazyLoad>
+              <h1>{item.title}</h1>
+              <p style={{wordWrap: 'break-word', whiteSpace: 'pre'}}>{item.body}</p>
+              <div onClick={() => this.deleteBlogPost(item.id, index)}>{'Delete'}</div>
+              <div onClick={() => this.editBlogPost(item.id, index)}>{'Edit'}</div>
+        </div>);
     }) : <div></div>;
 
 		return (

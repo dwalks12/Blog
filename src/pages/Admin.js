@@ -46,8 +46,6 @@ export default class AdminPage extends Component {
   }
 
   handleLoginSuccess(data) {
-    console.log(data.token);
-    console.log(data);
     if(data) {
 
       sessionStorage.setItem('jwtToken', data.token);

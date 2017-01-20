@@ -44,9 +44,32 @@ export default class AddPage extends Component {
     }
     var preSelectedId = this.getParameterByName('id');
     if(preSelectedId && preSelectedId.length > 0) {
-      console.log(preSelectedId);
+      this.getBlogPost(preSelectedId);
     }
 
+  }
+  getBlogPost(id) {
+    $.ajax({
+      type: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+      },
+      url: postURL + '/posts/' + id,
+      success: this.handleEditSuccess.bind(this),
+      error: this.handleEditError.bind(this),
+      dataType: 'json',
+    });
+  }
+  handleEditSuccess(data) {
+    console.log(data);
+    this.setState({
+      imageUrl: data.imageUrl,
+      title: data.title,
+      body: data.body,
+    });
+  }
+  handleEditError(data) {
+    console.log('ERROR');
   }
   getParameterByName(name, url) {
     if (!url) {
