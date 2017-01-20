@@ -41,7 +41,7 @@ export default class AdminPage extends Component {
       showModal: false,
     });
 
-    appHistory.replace('/content');
+    appHistory.replace('/#/content');
     //go to new page
   }
 
