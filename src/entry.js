@@ -11,7 +11,7 @@ import { useRouterHistory, browserHistory } from 'react-router';
 import App from './App';
 import appHistory from './utility/app_history';
 //import './styling/global.css';
-// import { createHashHistory } from 'history'
+// import { createHistory, useBasename } from 'history'
 const basename = ``;
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';

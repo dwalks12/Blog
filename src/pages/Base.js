@@ -22,11 +22,9 @@ export default class Base extends Component {
 	}
 
 	componentWillMount() {
-
 		this.checkLocationAddress();
 	}
 	checkLocationAddress() {
-		console.log('are you reloaded');
 		if(this.props.location.pathname.indexOf('/contentpage') >=0) {
 			this.changeMenuState();
 		} else if(this.props.location.pathname === '/') {
@@ -98,19 +96,10 @@ export default class Base extends Component {
 	}
 	checkStateChange(state) {
 		const route = state.routing.locationBeforeTransitions.pathname;
-
-		// console.log(state.routing.locationBeforeTransitions.pathname);
-		if(route.indexOf('/contentpage') >=0) {
-			return true;
-		} else if(route === '/') {
-			return false;
-		} else {
-			return false;
-		}
+		return (route.indexOf('/contentpage') >= 0);
 	}
 	render() {
 		const {store} = this.context;
-		console.log(store);
 		// console.log(store.getState());
 		const storeState = store.getState();
 		const getMenuChange = this.checkStateChange(storeState);

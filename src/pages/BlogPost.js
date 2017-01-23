@@ -99,6 +99,7 @@ class BlogPost extends Component {
               </LazyLoad>
               <h1 key={item.id + '-title'} >{item.title}</h1>
               <p key={item.id + '-body'} style={{maxWidth: '400px', wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>{item.body}</p>
+              <a style={{textDecoration: 'none', fontFamily: 'futura'}} href={postURL + '/#/post?id=' + item.id}>Link to blog</a>
               <div key={item.id + '-delete'} style={{cursor: 'pointer'}} onClick={() => this.deleteBlogPost(item.id, index)}>{'Delete '}<i className="material-icons">&#xE872;</i></div>
               <div key={item.id + '-edit'} style={{cursor: 'pointer'}} onClick={() => this.editBlogPost(item.id, index)}>{'Edit '}<i className="material-icons">&#xE254;</i></div>
         </div>);
