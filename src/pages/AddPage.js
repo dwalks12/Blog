@@ -30,6 +30,7 @@ export default class AddPage extends Component {
       error: false,
       uploadedFile: {},
       preSelectedId: '',
+      id: '',
     }
   }
   handleContentSuccess() {
@@ -142,7 +143,7 @@ export default class AddPage extends Component {
         id: this.state.preSelectedId.length > 0 ? this.state.preSelectedId : Math.random().toString(16).slice(2),
       }
 
-      var seeThis = this.props.route.store.dispatch(addPage(postData));
+      //var seeThis = this.props.route.store.dispatch(addPage(postData));
       $.ajax({
         type: 'POST',
         url: postURL + '/post',
@@ -163,6 +164,7 @@ export default class AddPage extends Component {
         success: true,
         loading: false,
         submitting: false,
+        id: data.id,
       });
     }
   }
@@ -176,46 +178,49 @@ export default class AddPage extends Component {
   removeErrorView() {
     this.setState({error: false,});
   }
+  viewBlogPost(id) {
+    console.log('Go to blog post ', id);
+  }
 	render() {
-    const loadingSpinner = this.state.loading || this.state.submitting ? <span><img className={css(styles.loading)} src='../images/loading.gif'/></span> : 'Upload';
+    const loadingSpinner = this.state.loading || this.state.submitting ? <span><img className={css(styles.loading)} src='../images/loading.gif'/></span> : this.state.preSelectedId.length > 0 ? 'Update' : 'Upload';
     const successDiv = this.state.success ? <div onClick={() => this.removeSuccessView() } style={{width: '300px', height: '100px', position: 'absolute', right: '0', top: '80px', backgroundColor: 'rgba(141, 198, 63, 0.8)', cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.5) 2px 2px 2px'}}><p style={{color: 'white', fontFamily: 'futura', fontSize: '20px', paddingLeft: '10px', paddingRight: '10px'}}>{'Successfully uploaded new blog post'}</p></div> : <div></div>
     const errorDiv = this.state.error ? <div onClick={() => this.removeErrorView() } style={{width: '300px', height: '100px', position: 'absolute', right: '0', top: '80px', backgroundColor: 'rgba(187, 32, 36, 0.8)', cursor: 'pointer', boxShadow: 'rgba(0, 0, 0, 0.5) 2px 2px 2px'}}><p style={{color: 'white', fontFamily: 'futura', fontSize: '20px', paddingLeft: '10px', paddingRight: '10px'}}>{'There was an error uploading post'}</p></div> : <div></div>
-    //error color: rgba(187, 32, 36, 0.8)
     const showImage = this.state.imageUrl ? <img className={css(styles.downloadedImage)} src={this.state.imageUrl} /> : <p style={{marginBottom: '20px', fontFamily: 'futura'}} className={css(styles.centerAlign)}>{'Drop your image here or click here to select a file to upload.'}</p>
+    const successScreen = this.state.success ? <div style={{height: '600px'}}><h1 style={{marginTop: '200px'}} className={css(styles.frontHeader)}>{'Successfully uploaded blog post'}</h1><div style={{fontFamily: 'futura'}} onClick={() => this.viewBlogPost(this.state.id)}>{'Click here to view'}</div></div> : (<div><h1 className={css(styles.frontHeader)}>{'Add an image here'}</h1><div className={css(styles.imageDropArea)}>
+        <Dropzone
+          className={css(styles.increasedWidth)}
+          multiple={false}
+          accept="image/*"
+          onDrop={this.onImageDrop.bind(this)}>
+          {showImage}
+
+        </Dropzone>
+      </div>
+      <div className={css(styles.dealerMetaContainer)}>
+        <h1 className={css(styles.frontHeader)}>{'Title'}</h1>
+        <div>
+          <input className={css(styles.titleTextBox)} placeholder={'Enter a title for this blog post'} value={this.state.title} onChange={this.handleTitleChange.bind(this)}/>
+        </div>
+      </div>
+      <div className={css(styles.dealerMetaContainer)}>
+        <h1 className={css(styles.frontHeader)}>{'Content'}</h1>
+        <div>
+          <textarea className={css(styles.bodyTextBox)} placeholder={'Enter body text here'} value={this.state.body} onChange={this.handleBodyChange.bind(this)}/>
+        </div>
+        {/* insert text box here */ }
+      </div>
+      <div style={{pointerEvents: this.state.loading ? 'none' : 'all' }} className={css(styles.submitButton)} onClick={() => this.submitUpload()}>{loadingSpinner}</div></div>);
+
+
+
 		return (
 			<div>
 				<Helmet title='ContentPage' />
         <div className={css(styles.dealerMetaContainer)}>
           {successDiv}
           {errorDiv}
-          <h1 className={css(styles.frontHeader)}>{'Add an image here'}</h1>
-          <div className={css(styles.imageDropArea)}>
-  				<Dropzone
-            className={css(styles.increasedWidth)}
-            multiple={false}
-            accept="image/*"
-            onDrop={this.onImageDrop.bind(this)}>
-            {showImage}
-
-          </Dropzone>
-          </div>
-          {/* insert drop image here/ import */}
+          {successScreen}
         </div>
-				<div className={css(styles.dealerMetaContainer)}>
-					<h1 className={css(styles.frontHeader)}>{'Title'}</h1>
-          <div>
-            <input className={css(styles.titleTextBox)} placeholder={'Enter a title for this blog post'} value={this.state.title} onChange={this.handleTitleChange.bind(this)}/>
-          </div>
-					{/*insert text box here */}
-				</div>
-				<div className={css(styles.dealerMetaContainer)}>
-          <h1 className={css(styles.frontHeader)}>{'Content'}</h1>
-          <div>
-            <textarea className={css(styles.bodyTextBox)} placeholder={'Enter body text here'} value={this.state.body} onChange={this.handleBodyChange.bind(this)}/>
-          </div>
-          {/* insert text box here */ }
-        </div>
-        <div style={{pointerEvents: this.state.loading ? 'none' : 'all' }} className={css(styles.submitButton)} onClick={() => this.submitUpload()}>{loadingSpinner}</div>
 			</div>
 		);
 	}
@@ -245,7 +250,7 @@ const styles = StyleSheet.create({
     }
   },
   bodyTextBox: {
-    width: '80%',
+    width: '90%',
     height: '400px',
     textAlign: 'center',
     fontFamily: 'futura',
@@ -254,11 +259,11 @@ const styles = StyleSheet.create({
     borderWidth: '3px',
   },
   titleTextBox: {
-    width: '80%',
+    width: '90%',
     height: '50px',
     textAlign: 'center',
     fontFamily: 'futura',
-    fontSize: '30px',
+    fontSize: '20px',
     cursor: 'pointer',
     borderWidth: '3px',
   },

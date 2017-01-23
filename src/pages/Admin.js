@@ -6,6 +6,7 @@ import request from 'superagent';
 import { browserHistory } from 'react-router'
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import {merge,swing,rollOut,rotateIn, rotateOut, pulse,shake, flash, bounce, rubberBand, jello} from 'react-animations';
+import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 import $ from 'jquery';
 var bcrypt = require('bcrypt-nodejs');
 const animation = merge(flash, shake);
@@ -37,6 +38,13 @@ export default class AdminPage extends Component {
       stateFile: {},
     };
 
+  }
+  componentDidMount() {
+    if(sessionStorage.getItem('jwtToken')) {
+      if(!isTokenExpired(sessionStorage.getItem('jwtToken'))) {
+        appHistory.replace('/contentpage');
+      }
+    }
   }
   loginSuccess() {
     this.setState({

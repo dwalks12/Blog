@@ -8,10 +8,12 @@ import appHistory from '../utility/app_history';
 const URLS = require('../../models/config.js');
 const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
-import {fetchPages} from '../actions/actions';
-export default class BlogPost extends Component {
+import {connect} from 'react-redux';
+import {fetchPages, deletePage, editPage} from '../actions/actions';
+class BlogPost extends Component {
 	static propTypes = {
     postId: PropTypes.string,
+    data: PropTypes.any,
   }
   static contextTypes = {
     store: PropTypes.object,
@@ -19,7 +21,7 @@ export default class BlogPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      blogPosts: [],
+      blogPosts: props.data ? props.data : [],
     }
     //console.log('the session token is ', sessionStorage.getItem('jwtToken'));
 
@@ -29,13 +31,16 @@ export default class BlogPost extends Component {
     const {store} = this.context;
     if(sessionStorage.getItem('jwtToken')) {
       if(!isTokenExpired(sessionStorage.getItem('jwtToken'))) {
-        store.dispatch(fetchPages()).then(() => {
-          var data = store.getState().rootReducer.getPages.data;
-          // console.log(data);
-          this.setState({
-            blogPosts: data,
-          })
-        })
+        this.props.fetchPages();
+        // var data = store.getState().rootReducer.getPages.data;
+        // console.log(fetchedPages, data);
+        // this.props.fetchPages().then(() => {
+        //   var data = store.getState().rootReducer.getPages.data;
+        //   // console.log(data);
+        //   this.setState({
+        //     blogPosts: data,
+        //   })
+        // })
       } else {
         sessionStorage.removeItem('jwtToken');
       }
@@ -51,16 +56,19 @@ export default class BlogPost extends Component {
     })
   }
   editBlogPost(id) {
-    $.ajax({
-      type: 'GET',
-      headers: {
-        'x-access-token': sessionStorage.getItem('jwtToken'),
-      },
-      url: postURL + '/posts/' + id,
-      success: this.handleEditSuccess.bind(this),
-      error: this.handleEditError.bind(this),
-      dataType: 'json',
-    });
+
+    this.props.editPage(id);
+
+    // $.ajax({
+    //   type: 'GET',
+    //   headers: {
+    //     'x-access-token': sessionStorage.getItem('jwtToken'),
+    //   },
+    //   url: postURL + '/posts/' + id,
+    //   success: this.handleEditSuccess.bind(this),
+    //   error: this.handleEditError.bind(this),
+    //   dataType: 'json',
+    // });
   }
   handleEditSuccess(data) {
     appHistory.replace('/contentpage/addPage?id=' + data.id);
@@ -69,16 +77,8 @@ export default class BlogPost extends Component {
 
   }
   deleteBlogPost(id, index) {
-    $.ajax({
-      type: 'DELETE',
-      headers: {
-        'x-access-token': sessionStorage.getItem('jwtToken'),
-      },
-      url: postURL+ '/posts/' + id,
-      success: this.handleDeleteSuccess.bind(this, index),
-      error: this.handleDeleteError.bind(this),
-      dataType: 'json',
-    });
+    this.props.deletePage(id);
+    this.props.fetchPages();
   }
   handleDeleteSuccess(theIndex) {
     var tempArray = this.state.blogPosts.filter(function(el, index) {
@@ -92,7 +92,7 @@ export default class BlogPost extends Component {
     console.log('blog delete error');
   }
 	render() {
-    const blogs = this.state.blogPosts.length > 0 ? this.state.blogPosts.map((item, index) => {
+    const blogs = this.props.data && this.props.data.length > 0 ? this.props.data.map((item, index) => {
       return (<div className={css(styles.blogItem)} key={item.id}>
               <LazyLoad>
                 <img className={css(styles.blogImage)} src={item.imageUrl} key={item.imageid} />
@@ -109,11 +109,8 @@ export default class BlogPost extends Component {
 				<Helmet title='ContentPage' />
 
 				<div className={css(styles.dealerMetaContainer)}>
-					<LazyLoad>
-						<img className={css(styles.bannerImage)} src={'../images/Dawson.png'}/>
-					</LazyLoad>
-					<h1 className={css(styles.frontHeader)}>{'Dawson Walker'}</h1>
-					<p style={{fontFamily: 'futura',}}>{'A blog of sorts'}</p>
+					<h1 className={css(styles.frontHeader)}>{'Blogs'}</h1>
+					<p style={{fontFamily: 'futura',}}>{'Here are all your blogs'}</p>
 				</div>
 				<div className={css(styles.carouselContainer)}>
 					<div className={css(styles.gridCarText)}>
@@ -126,6 +123,24 @@ export default class BlogPost extends Component {
 		);
 	}
 }
+
+export default connect(
+  state => ({
+    data: state.rootReducer.getPages.data,
+    editPage: state.rootReducer.editPage.data,
+  }),
+  dispatch => ({
+    fetchPages: () => {
+      dispatch(fetchPages());
+    },
+    deletePage: (id) => {
+      dispatch(deletePage(id));
+    },
+    editPage: (id) => {
+      dispatch(editPage(id));
+    }
+  })
+)(BlogPost)
 
 const styles = StyleSheet.create({
   blogGrid: {
@@ -141,7 +156,10 @@ const styles = StyleSheet.create({
   },
   blogImage: {
     maxWidth: '400px',
-    height: 'auto',
+    width: '100%',
+    objectFit: 'cover',
+    overflow: 'hidden',
+    height: '20%',
   },
 	dealerMetaContainer: {
 		marginTop: '0.5rem',
