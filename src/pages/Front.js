@@ -5,11 +5,15 @@ import LazyLoad from 'react-lazy-load';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 export default class FrontPage extends Component {
 	static propTypes = {}
-
+	
+	constructor(props) {
+		super(props);
+	}
+	componentDidMount() {
+		console.log(this.props);
+	}
 
 	render() {
-
-
 		return (
 			<div>
 				<Helmet title='Dawsons Site' />

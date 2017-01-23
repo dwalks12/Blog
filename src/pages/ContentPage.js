@@ -1,22 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { StyleSheet, css } from '../styling/index.js';
 import Helmet from 'react-helmet';
 import LazyLoad from 'react-lazy-load';
 import $ from 'jquery';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import appHistory from '../utility/app_history';
-//const postURL = 'https://beverlywalker.herokuapp.com'; // 'http://localhost:3000';
+
 const URLS = require('../../models/config.js');
 const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 
 export default class ContentPage extends Component {
 	static propTypes = {}
-
+  
   constructor(props) {
     super(props);
-    //console.log('the session token is ', sessionStorage.getItem('jwtToken'));
-
+    this.state = {
+      menuOpen: props.openMenu,
+    }
   }
   handleContentSuccess() {
 
@@ -27,15 +28,8 @@ export default class ContentPage extends Component {
   componentDidMount() {
     if(sessionStorage.getItem('jwtToken')) {
       if(!isTokenExpired(sessionStorage.getItem('jwtToken'))) {
-        $.ajax({
-          type: 'GET',
-          headers: {
-            'x-access-token': sessionStorage.getItem('jwtToken'),
-          },
-          url: postURL + '/content',
-          success: this.handleContentSuccess.bind(this),
-          error: this.handleContentFailure.bind(this),
-          dataType: 'json',
+        this.setState({
+          menuOpen: true,
         });
       } else {
         sessionStorage.removeItem('jwtToken');

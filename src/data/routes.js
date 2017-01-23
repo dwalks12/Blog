@@ -3,9 +3,9 @@ export const pages = {
 	404: '/404',
 	image: '/image',
 	gallery: '/gallery',
-	content: '/content',
-	addPage: '/content/addPage',
-	blogPost: '/content/blogPost',
+	content: '/contentpage',
+	addPage: '/contentpage/addPage',
+	blogPost: '/contentpage/blogPost',
 };
 
 export default {pages};

@@ -8,12 +8,14 @@ import appHistory from '../utility/app_history';
 const URLS = require('../../models/config.js');
 const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
-
+import {fetchPages} from '../actions/actions';
 export default class BlogPost extends Component {
 	static propTypes = {
     postId: PropTypes.string,
   }
-
+  static contextTypes = {
+    store: PropTypes.object,
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -24,19 +26,16 @@ export default class BlogPost extends Component {
   }
 
   componentDidMount() {
-
+    const {store} = this.context;
     if(sessionStorage.getItem('jwtToken')) {
       if(!isTokenExpired(sessionStorage.getItem('jwtToken'))) {
-        $.ajax({
-          type: 'GET',
-          headers: {
-            'x-access-token': sessionStorage.getItem('jwtToken'),
-          },
-          url: postURL + '/posts',
-          success: this.handleContentSuccess.bind(this),
-          error: this.handleContentFailure.bind(this),
-          dataType: 'json',
-        });
+        store.dispatch(fetchPages()).then(() => {
+          var data = store.getState().rootReducer.getPages.data;
+          // console.log(data);
+          this.setState({
+            blogPosts: data,
+          })
+        })
       } else {
         sessionStorage.removeItem('jwtToken');
       }
@@ -51,14 +50,6 @@ export default class BlogPost extends Component {
       blogPosts: [],
     })
   }
-  handleContentSuccess(data) {
-    this.setState({
-      blogPosts: data,
-    })
-  }
-  handleContentFailure(data) {
-
-  }
   editBlogPost(id) {
     $.ajax({
       type: 'GET',
@@ -72,7 +63,7 @@ export default class BlogPost extends Component {
     });
   }
   handleEditSuccess(data) {
-    appHistory.replace('/content/addPage?id=' + data.id);
+    appHistory.replace('/contentpage/addPage?id=' + data.id);
   }
   handleEditError() {
 
@@ -102,14 +93,14 @@ export default class BlogPost extends Component {
   }
 	render() {
     const blogs = this.state.blogPosts.length > 0 ? this.state.blogPosts.map((item, index) => {
-      return (<div key={item.id}>
+      return (<div className={css(styles.blogItem)} key={item.id}>
               <LazyLoad>
-                <img src={item.imageUrl} key={item.imageid} />
+                <img className={css(styles.blogImage)} src={item.imageUrl} key={item.imageid} />
               </LazyLoad>
-              <h1>{item.title}</h1>
-              <p style={{wordWrap: 'break-word', whiteSpace: 'pre'}}>{item.body}</p>
-              <div onClick={() => this.deleteBlogPost(item.id, index)}>{'Delete'}</div>
-              <div onClick={() => this.editBlogPost(item.id, index)}>{'Edit'}</div>
+              <h1 key={item.id + '-title'} >{item.title}</h1>
+              <p key={item.id + '-body'} style={{maxWidth: '400px', wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>{item.body}</p>
+              <div key={item.id + '-delete'} style={{cursor: 'pointer'}} onClick={() => this.deleteBlogPost(item.id, index)}>{'Delete '}<i className="material-icons">&#xE872;</i></div>
+              <div key={item.id + '-edit'} style={{cursor: 'pointer'}} onClick={() => this.editBlogPost(item.id, index)}>{'Edit '}<i className="material-icons">&#xE254;</i></div>
         </div>);
     }) : <div></div>;
 
@@ -128,7 +119,7 @@ export default class BlogPost extends Component {
 					<div className={css(styles.gridCarText)}>
 					</div>
 				</div>
-				<div className={css(styles.paddingTop)}>
+				<div className={css(styles.blogGrid)}>
           {blogs}
 				</div>
 			</div>
@@ -137,6 +128,21 @@ export default class BlogPost extends Component {
 }
 
 const styles = StyleSheet.create({
+  blogGrid: {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+    flexWrap: 'wrap',
+    fontFamily: 'futura',
+  },
+  blogItem: {
+    maxWidth: '400px',
+    margin: '10px',
+  },
+  blogImage: {
+    maxWidth: '400px',
+    height: 'auto',
+  },
 	dealerMetaContainer: {
 		marginTop: '0.5rem',
 		marginBottom: '10px',

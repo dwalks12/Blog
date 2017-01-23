@@ -1,44 +1,45 @@
 import React, { Component, PropTypes } from 'react';
 import { StyleSheet, css } from '../styling/index.js';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
-// import { country } from 'config';
+
 import { Link, IndexLink } from 'react-router';
 import Helmet from 'react-helmet';
 
 import FontLoader from '../containers/FontLoader';
-// import TopMenu from 'containers/TopMenuContainer';
-// import OpenTopMenu from 'modules/OpenTopMenu';
-// import FooterMenu from 'modules/FooterMenu';
-// import FooterLinks from 'presentational/FooterLinks';
-
-// import { ProvideAnalytics } from 'utility/analytics';
 
 export default class Base extends Component {
 	static propTypes = {
 		children: PropTypes.any,
-	}
+		openMenu: PropTypes.bool,
 
+	}
+	static contextTypes = {
+		store: PropTypes.object,
+	}
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			menuOpen: false,
-		};
-
 	}
 
-	componentDidMount() {
-		const html = document.getElementsByTagName('html')[0];
-		html.className = (html.className + ' ' + css(styles.html)).trim();
-		if(this.props.location.pathname.indexOf('/content') >=0) {
+	componentWillMount() {
+
+		this.checkLocationAddress();
+	}
+	checkLocationAddress() {
+		console.log('are you reloaded');
+		if(this.props.location.pathname.indexOf('/contentpage') >=0) {
 			this.changeMenuState();
+		} else if(this.props.location.pathname === '/') {
+			this.changeMenuStateFalse();
 		}
 	}
-
 	componentWillUnmount() {
-		const html = document.getElementsByTagName('html')[0];
-		html.className = html.className.replace(css(styles.html), '').trim();
 
+	}
+	changeMenuStateFalse() {
+		this.setState({
+			menuOpen: false,
+		});
 	}
 	changeMenuState() {
 		this.setState({
@@ -46,17 +47,24 @@ export default class Base extends Component {
 		});
 	}
 	renderAdminPage() {
+
 		return <div>
 				<Link
 					className={css(styles.menuItem)}
-					to={'/content/addPage'}>
+					to={'/'}>
+					<i className="material-icons">&#xE88A;</i>
+				</Link>
+				<Link
+					className={css(styles.menuItem)}
+					to={'/contentpage/addPage'}>
 					{'Add Page'}
 				</Link>
 				<Link
 					className={css(styles.menuItem)}
-					to={'/content/blogPost'}>
+					to={'/contentpage/blogPost'}>
 					{'Blog Posts'}
 				</Link>
+
 				<div className={css(styles.content)}>
 					{this.props.children}
 				</div>
@@ -68,7 +76,7 @@ export default class Base extends Component {
 				<Link
 					className={css(styles.menuItem)}
 					to={'/'}>
-						{'Home'}
+						<i className="material-icons">&#xE88A;</i>
 				</Link>
 				<Link
 					className={css(styles.menuItem)}
@@ -88,8 +96,25 @@ export default class Base extends Component {
 
 		</div>;
 	}
+	checkStateChange(state) {
+		const route = state.routing.locationBeforeTransitions.pathname;
 
+		// console.log(state.routing.locationBeforeTransitions.pathname);
+		if(route.indexOf('/contentpage') >=0) {
+			return true;
+		} else if(route === '/') {
+			return false;
+		} else {
+			return false;
+		}
+	}
 	render() {
+		const {store} = this.context;
+		console.log(store);
+		// console.log(store.getState());
+		const storeState = store.getState();
+		const getMenuChange = this.checkStateChange(storeState);
+		// this.checkStateChange(storeState);
 		return (
 			<div className={css(styles.base)}>
 				<FontLoader fonts={webFonts} />
@@ -100,7 +125,7 @@ export default class Base extends Component {
 					]}
 				/>
 
-				{ this.state.menuOpen
+				{ getMenuChange
 					?
 							this.renderAdminPage()
 					: this.renderPage()

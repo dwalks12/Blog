@@ -61,7 +61,7 @@ var config = {
     ]
   },
   devServer: {
-     historyApiFallback: true
+     historyApiFallback: true,
  },
 
   // We have to manually add the Hot Replacement plugin when running

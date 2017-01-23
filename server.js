@@ -160,17 +160,18 @@ app.use(function(req, res, next) {
   }
 });
 
-app.post('/content', function(req, res) {
+app.post('/post', function(req, res) {
 
   var newPost = req.body;
   if(!req.body) {
     handleError(res, 'Invalid parameters', '', 400);
   }
-  db.collection(POSTS_COLLECTION).insertOne(newPost, function(err, doc) {
+  db.collection(POSTS_COLLECTION).update({id: newPost.id}, newPost, {upsert: true}, function(err, result, upserted) {
     if(err) {
       handleError(res, err.message, 'Failed to create post');
     } else {
-      res.status(201).json(doc.ops[0]);
+      //console.log(doc);
+      res.status(201).json(result);
     }
   });
 });

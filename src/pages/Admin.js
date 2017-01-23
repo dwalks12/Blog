@@ -20,6 +20,9 @@ const postURL =  URLS.globalUrl;//'https://beverlywalker.herokuapp.com'; //'http
 import appHistory from '../utility/app_history';
 
 export default class AdminPage extends Component {
+  static contextTypes = {
+    router: React.PropTypes.object.isRequired
+  }
   constructor(props) {
     super(props);
 
@@ -33,6 +36,7 @@ export default class AdminPage extends Component {
       showModal: true,
       stateFile: {},
     };
+
   }
   loginSuccess() {
     this.setState({
@@ -40,9 +44,10 @@ export default class AdminPage extends Component {
       loading: false,
       showModal: false,
     });
-
-    appHistory.replace('/#/content');
+    // this.context.router.push('/contentpage');
+    appHistory.replace('/contentpage');
     //go to new page
+    // this.props.route.store.dispatch(push('/contentpage'));
   }
 
   handleLoginSuccess(data) {

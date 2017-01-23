@@ -7,6 +7,7 @@ import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import appHistory from '../utility/app_history';
 import Dropzone from 'react-dropzone';
 import request from 'superagent';
+import {addPage} from '../actions/actions';
 const CLOUDINARY_UPLOAD_PRESET = 'upload';
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload';
 //const postURL =  'https://beverlywalker.herokuapp.com'; //'http://localhost:3000';
@@ -28,6 +29,7 @@ export default class AddPage extends Component {
       submitting: false,
       error: false,
       uploadedFile: {},
+      preSelectedId: '',
     }
   }
   handleContentSuccess() {
@@ -44,6 +46,7 @@ export default class AddPage extends Component {
     }
     var preSelectedId = this.getParameterByName('id');
     if(preSelectedId && preSelectedId.length > 0) {
+
       this.getBlogPost(preSelectedId);
     }
 
@@ -66,7 +69,9 @@ export default class AddPage extends Component {
       imageUrl: data.imageUrl,
       title: data.title,
       body: data.body,
+      preSelectedId: data.id,
     });
+
   }
   handleEditError(data) {
     console.log('ERROR');
@@ -128,19 +133,19 @@ export default class AddPage extends Component {
   submitUpload() {
     this.setState({submitting: true,})
     if(this.state.title.length > 0 && this.state.body.length > 0) {
-      console.log('uploadable');
       var postData = {
         imageUrl: this.state.imageUrl ? this.state.imageUrl : '',
         imageid: this.state.stateFile.name ? this.state.stateFile.name : '',
         title: this.state.title,
         body: this.state.body,
         createdAt: new Date(),//change this eventually
-        id: Math.random().toString(16).slice(2),
+        id: this.state.preSelectedId.length > 0 ? this.state.preSelectedId : Math.random().toString(16).slice(2),
       }
-      console.log(postData);
+
+      var seeThis = this.props.route.store.dispatch(addPage(postData));
       $.ajax({
         type: 'POST',
-        url: postURL + '/content',
+        url: postURL + '/post',
         headers: {
           'x-access-token': sessionStorage.getItem('jwtToken'),
         },
@@ -152,7 +157,6 @@ export default class AddPage extends Component {
     }
   }
   handlePostSuccess(data) {
-    console.log(data);
     //data.id to get the id of the specific blog.
     if(data) {
       this.setState({
@@ -163,7 +167,6 @@ export default class AddPage extends Component {
     }
   }
   handlePostFailure(error) {
-    console.log(error);
     this.setState({error: true, submitting: false});
 
   }

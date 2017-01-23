@@ -1,31 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+// import {store}from './store/store';
 import { createHistory, useBasename, createHashHistory } from 'history';
 import useScroll from 'scroll-behavior/lib/useStandardScroll';
-
-var BrowserHistory = require('react-router/lib/browserHistory').default;
+import { Provider } from 'react-redux'
+// var BrowserHistory = require('react-router/lib/browserHistory').default;
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import shouldUpdateScroll from './utility/shouldUpdateScroll';
 import { useRouterHistory, browserHistory } from 'react-router';
 import App from './App';
 import appHistory from './utility/app_history';
 //import './styling/global.css';
-
+// import { createHashHistory } from 'history'
 const basename = ``;
+import thunkMiddleware from 'redux-thunk';
+import createLogger from 'redux-logger';
+import {createStore, applyMiddleware,combineReducers} from 'redux';
+import { syncHistoryWithStore, routerReducer, push, replace  } from 'react-router-redux'
+import rootReducer from './reducers/reducer';
+// var defaultState = {data: {}};
+var loggerMiddleware = createLogger();
 
-// const history = useScroll(useRouterHistory(createHistory))({
-// 	basename,
-// 	shouldUpdateScroll,
-// });
-// const history = useBasename(createHistory)({basename});
-const history = appHistory;//useRouterHistory(createHashHistory)({queryKey: false});
+var store = createStore(
+	combineReducers({
+		rootReducer,
+		routing: routerReducer,
+	}),
+	applyMiddleware(
+		thunkMiddleware,
+		loggerMiddleware,
+	),
+);
+
+function analyticsService(location) {
+	store.dispatch(push(location));
+}
+
+const history = syncHistoryWithStore(appHistory, store);
+history.listen(location => analyticsService(location.pathname))
+
 const root = document.getElementById('root');
 const render = () => {
+
 	const WrappedApp = () =>
-		<div>
-			<App history={history} />
-		</div>
+			<Provider store={store}>
+				<App history={history}/>
+			</Provider>
 	;
 
 	ReactDOM.render(<WrappedApp />, root);
