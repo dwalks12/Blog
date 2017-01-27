@@ -5,18 +5,20 @@ import LazyLoad from 'react-lazy-load';
 import $ from 'jquery';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import appHistory from '../utility/app_history';
-
+import Dropzone from 'react-dropzone';
+import request from 'superagent';
 const URLS = require('../../models/config.js');
 const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 
 export default class ContentPage extends Component {
 	static propTypes = {}
-  
+
   constructor(props) {
     super(props);
     this.state = {
       menuOpen: props.openMenu,
+      title: '',
     }
   }
   handleContentSuccess() {
@@ -40,6 +42,9 @@ export default class ContentPage extends Component {
     }
 
   }
+  onImageDrop(files) {
+    console.log(files[0]);
+  }
 	render() {
 
 
@@ -48,11 +53,26 @@ export default class ContentPage extends Component {
 				<Helmet title='ContentPage' />
 
 				<div className={css(styles.dealerMetaContainer)}>
-					<LazyLoad>
-						<img className={css(styles.bannerImage)} src={'../images/Dawson.png'}/>
-					</LazyLoad>
-					<h1 className={css(styles.frontHeader)}>{'Dawson Walker'}</h1>
+          <h1 className={css(styles.frontHeader)}>{'Click on image to change frontpage image'}</h1>
+          <Dropzone
+            className={css(styles.increasedWidth)}
+            multiple={false}
+            accept="image/*"
+            onDrop={this.onImageDrop.bind(this)}>
+            <LazyLoad>
+              <img className={css(styles.bannerImage)} src={'../images/Dawson.png'}/>
+            </LazyLoad>
+          </Dropzone>
+
+          <div>
+            <input className={css(styles.titleTextBox)} placeholder={'Enter a title for the frontpage'} value={this.state.title} onChange={this.handleTitleChange.bind(this)}/>
+          </div>
+          <div>
+  					<h1 className={css(styles.frontHeader)}>{'Dawson Walker'}</h1>
+            <p>{'Edit Title'}</p> <i className="material-icons">&#xE254;</i>
+          </div>
 					<p style={{fontFamily: 'futura',}}>{'A blog of sorts'}</p>
+          <div>{'Edit text'}<i className="material-icons">&#xE254;</i></div>
 				</div>
 				<div className={css(styles.carouselContainer)}>
 					<div className={css(styles.gridCarText)}>
@@ -67,6 +87,16 @@ export default class ContentPage extends Component {
 }
 
 const styles = StyleSheet.create({
+  increasedWidth: {
+    width: '100%',
+    height: '400px',
+    borderStyle: 'dashed',
+    borderWidth: '5px',
+    [`@media (max-width: ${ breakpoints.mdMin }px)`]: {
+			width: '80%',
+      margin: 'auto',
+		},
+  },
 	dealerMetaContainer: {
 		marginTop: '0.5rem',
 		marginBottom: '10px',
@@ -80,8 +110,10 @@ const styles = StyleSheet.create({
 		marginBottom: '15px',
 	},
 	bannerImage: {
-		height: 'auto',
-		width: 'auto',
+		height: '100%',
+		width: '100%',
+    objectFit: 'cover',
+    overflow: 'hidden',
 		maxHeight: '600px',
 		[`@media (max-width: ${ breakpoints.mdMin }px)`]: {
 			width: '100%',

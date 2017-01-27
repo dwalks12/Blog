@@ -5,7 +5,7 @@ import LazyLoad from 'react-lazy-load';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 export default class FrontPage extends Component {
 	static propTypes = {}
-	
+
 	constructor(props) {
 		super(props);
 	}
@@ -16,22 +16,16 @@ export default class FrontPage extends Component {
 	render() {
 		return (
 			<div>
-				<Helmet title='Dawsons Site' />
+				<Helmet title='Beverly Walker' />
 
 				<div className={css(styles.dealerMetaContainer)}>
 					<LazyLoad>
 						<img className={css(styles.bannerImage)} src={'../images/Dawson.png'}/>
 					</LazyLoad>
-					<h1 className={css(styles.frontHeader)}>{'Dawson Walker'}</h1>
-					<p style={{fontFamily: 'futura',}}>{'A blog of sorts'}</p>
+					<h1 className={css(styles.frontHeader)}>{'Beverly Walker'}</h1>
+					<p style={{fontFamily: 'futura',}}>{'A collection of thoughts and images, feel free to explore.'}</p>
 				</div>
-				<div className={css(styles.carouselContainer)}>
-					<div className={css(styles.gridCarText)}>
-					</div>
-				</div>
-				<div className={css(styles.paddingTop)}>
 
-				</div>
 			</div>
 		);
 	}

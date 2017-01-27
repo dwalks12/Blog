@@ -41,7 +41,8 @@ var config = {
     {
       test: /\.js$/,
       loader: 'babel',
-      exclude: [nodeModulesPath]
+      exclude: [nodeModulesPath],
+      
     },
 
     // Let us also add the style-loader and css-loader, which you can
@@ -70,39 +71,3 @@ var config = {
 };
 
 module.exports = config;
-
-// var path = require('path');
-// module.exports = {
-//   entry: ['./src/entry.js', 'babel-polyfill'],
-//   output: {
-//     filename: 'bundle.js',
-//     path: path.resolve(__dirname, 'public/')
-//   },
-//   devServer:{
-//     devServer: {
-//     port: 8080,
-//     historyApiFallback: {
-//       index: 'index.html'
-//     }
-//   }
-//   },
-//   module: {
-//     loaders: [
-//       {
-//         test: /\.js$/,
-//         loader: 'babel-loader',
-//         exclude: /node_modules/
-//       },
-//       {
-//         test: /\.(otf|jpg|png|woff|eot|ttf|svg|woff2)$/,
-//         loader: 'file-loader'
-//       },
-//       { test: /\.(png|jpg|jpeg|gif|woff)$/, loader: 'url?limit=8192' },
-//       { test: /\.(otf|eot|ttf)$/, loader: "file?prefix=font/" },
-//       {
-//         test: /\.css$/,
-//         loader: 'style-loader!css-loader',
-//       }
-//     ]
-//   }
-// };
