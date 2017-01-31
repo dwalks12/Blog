@@ -42,6 +42,9 @@ export default class ContentPage extends Component {
     }
 
   }
+  handleTitleChange(title) {
+    
+  }
   onImageDrop(files) {
     console.log(files[0]);
   }
