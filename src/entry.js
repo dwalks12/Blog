@@ -20,8 +20,8 @@ import { syncHistoryWithStore, routerReducer, push, replace  } from 'react-route
 import rootReducer from './reducers/reducer';
 // var defaultState = {data: {}};
 var loggerMiddleware = createLogger();
-console.log(process.env.NODE_ENV);
-var store = createStore(
+
+var store = process.env.NODE_ENV !== 'production' ? createStore(
 	combineReducers({
 		rootReducer,
 		routing: routerReducer,
@@ -29,6 +29,14 @@ var store = createStore(
 	applyMiddleware(
 		thunkMiddleware,
 		loggerMiddleware,
+	),
+) : createStore(
+	combineReducers({
+		rootReducer,
+		routing: routerReducer,
+	}),
+	applyMiddleware(
+		thunkMiddleware,
 	),
 );
 

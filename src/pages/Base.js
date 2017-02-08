@@ -95,6 +95,11 @@ export default class Base extends Component {
 					to={'/gallery'}>
 					{'Image Gallery'}
 				</Link>
+				<Link
+					className={css(styles.menuItem)}
+					to={'/blogs'}>
+					{'Blogs'}
+				</Link>
 			</div>
 				<div className={css(styles.content)}>
 					{ this.props.children }

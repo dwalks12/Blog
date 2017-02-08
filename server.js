@@ -95,6 +95,11 @@ app.get('/frontpage', function(req, res) {
     }
   });
 });
+app.get('/posts', function(req, res) {
+  db.collection(POSTS_COLLECTION).find().toArray(function(err, items) {
+    res.status(201).json(items);
+  });
+});
 app.post('/login', function(req, res) {
   var loginCredentials = req.body;
   var username = req.body.username;
@@ -148,11 +153,7 @@ app.post('/login', function(req, res) {
 // var authenticated = passport.authenticate('basic', {session: false});
 // console.log(authenticated);
 });
-app.get('/posts', function(req, res) {
-  db.collection(POSTS_COLLECTION).find().toArray(function(err, items) {
-    res.status(201).json(items);
-  });
-});
+
 app.get('/posts/:id', function(req, res) {
   db.collection(POSTS_COLLECTION).findOne({id: req.params.id}, function(err, results) {
     if(err) {

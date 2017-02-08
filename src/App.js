@@ -26,7 +26,7 @@ const App = ({history, location}) => (
 				<Route key={'image'} path='image' getComponent={page('Image')}/>
 				<Route key={'image-gallery'} path='image-gallery' getComponent={page('AdminGallery')}/>
 			</Route>
-
+			<Route key={'blogs'} path='blogs' getComponent={page('Blogs')}/>
 			<Route key={'gallery'} path='gallery' getComponent={page('Gallery')}/>
 			<Route key={'404'} path='404' getComponent={page('404')} />
 			<Route key={'admin'} path='admin' getComponent={page('Admin')}/>
