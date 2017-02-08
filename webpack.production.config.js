@@ -29,7 +29,11 @@ var config = {
     }]
   },
   devServer: {
-     historyApiFallback: true
+     historyApiFallback: true,
+     headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+    }
  },
   plugins: [ new Webpack.optimize.UglifyJsPlugin({
         compress: {

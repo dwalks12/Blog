@@ -6,7 +6,7 @@ var mainPath = path.resolve(__dirname, 'src', 'entry.js');
 console.log('using dev');
 var config = {
   // Makes sure errors in console map to the correct file
-  // and line number
+  // and line numbe
   devtool: 'eval',
   entry: [
 
@@ -42,7 +42,7 @@ var config = {
       test: /\.js$/,
       loader: 'babel',
       exclude: [nodeModulesPath],
-      
+
     },
 
     // Let us also add the style-loader and css-loader, which you can
@@ -64,7 +64,6 @@ var config = {
   devServer: {
      historyApiFallback: true,
  },
-
   // We have to manually add the Hot Replacement plugin when running
   // from Node
   plugins: [new Webpack.HotModuleReplacementPlugin()]

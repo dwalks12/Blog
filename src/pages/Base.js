@@ -54,6 +54,11 @@ export default class Base extends Component {
 				</Link>
 				<Link
 					className={css(styles.menuItem)}
+					to={'/contentpage'}>
+					{'Front Page Manger'}
+				</Link>
+				<Link
+					className={css(styles.menuItem)}
 					to={'/contentpage/addPage'}>
 					{'Add Page'}
 				</Link>
@@ -62,7 +67,16 @@ export default class Base extends Component {
 					to={'/contentpage/blogPost'}>
 					{'Blog Posts'}
 				</Link>
-
+				<Link
+					className={css(styles.menuItem)}
+					to={'/contentpage/image'}>
+					{'Upload Images'}
+				</Link>
+				<Link
+					className={css(styles.menuItem)}
+					to={'/contentpage/image-gallery'}>
+					{'Image Gallery'}
+				</Link>
 				<div className={css(styles.content)}>
 					{this.props.children}
 				</div>
@@ -78,13 +92,8 @@ export default class Base extends Component {
 				</Link>
 				<Link
 					className={css(styles.menuItem)}
-					to={'/image'}>
-					{'Upload'}
-				</Link>
-				<Link
-					className={css(styles.menuItem)}
 					to={'/gallery'}>
-					{'Gallery'}
+					{'Image Gallery'}
 				</Link>
 			</div>
 				<div className={css(styles.content)}>

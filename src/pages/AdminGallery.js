@@ -10,7 +10,7 @@ const animation = merge(rotateOut, rotateIn);
 const URLS = require('../../models/config.js');
 const postURL = URLS.globalUrl;
 //const postURL = 'https://beverlywalker.herokuapp.com'; // for local testing.'http://localhost:3000';//
-export default class GalleryPage extends Component {
+export default class AdminGallery extends Component {
 	static propTypes = {}
   constructor(props) {
     super(props);
@@ -25,6 +25,11 @@ export default class GalleryPage extends Component {
 
   }
   componentDidMount() {
+    if(sessionStorage.getItem('jwtToken')) {
+      console.log('session still valid');
+    } else {
+      appHistory.replace('/admin');
+    }
     this.getImages();
   }
 
@@ -72,14 +77,15 @@ export default class GalleryPage extends Component {
     });
 
   }
-  handleDelete() {
-    this.setState({
-      showModal: false,
-    });
+  handleDelete(imageId, index) {
+    var that = this;
     $.ajax({
       type: 'DELETE',
-      url: postURL+ '/images/' + this.state.imageId,
-      success: this.handleDeleteSuccess.bind(this, this.state.imageIndex),
+      headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+      },
+      url: postURL+ '/images/' + imageId,
+      success: this.handleDeleteSuccess.bind(this, index),
       error: this.handleDeleteError.bind(this),
       dataType: 'json',
     });
@@ -144,9 +150,10 @@ export default class GalleryPage extends Component {
   }
   renderImages(images) {
     if(images.length > 0) {
-      return images.map((images, index) => (
-        <div key={`${index}-div1`}><div key={`${index}-div3`}></div><LazyLoad className={css(styles.marginIt)} height={300} offsetBottom={10}><img className={css(styles.galleryImages)} src={images.imageUrl} key={index} ></img></LazyLoad></div>
-      ))
+      return images.map((images, index) => {
+        console.log(images);
+        return (<div key={`${index}-div1`}><div key={`${index}-div3`} className={css(styles.closeIcon)} onClick={() => this.handleDelete(images._id, index)}></div><LazyLoad className={css(styles.marginIt)} height={300} offsetBottom={10}><img className={css(styles.galleryImages)} src={images.imageUrl} key={index} ></img></LazyLoad></div>
+      )})
     } else {
       return [];
     }

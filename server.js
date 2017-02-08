@@ -11,6 +11,7 @@ var cors = require('cors');
 var IMAGES_COLLECTION = 'images';
 var LOGIN_COLLECTION = 'login';
 var POSTS_COLLECTION = 'posts';
+var FRONTPAGE_COLLECTION = 'frontpage';
 var isProduction = process.env.NODE_ENV === 'production';
 var port = isProduction ? process.env.PORT : 3000;
 var publicPath = path.resolve(__dirname, 'public');
@@ -24,11 +25,11 @@ var config = require('./models/database');
 var mongoose = require('mongoose');
 
 app.set('superSecret', config.secret);
-var hash = bcrypt.hash('momsblog1961', 10, null, function(err, hash) {
-            if(err) return 'error';
-            console.log('the hash is', hash);
-            return hash;
-          });
+// var hash = bcrypt.hash('momsblog1961', 10, null, function(err, hash) {
+//             if(err) return 'error';
+//             console.log('the hash is', hash);
+//             return hash;
+//           });
 app.use(passport.initialize());
 app.use(express.static(publicPath));
 app.use(morgan('dev'));
@@ -139,7 +140,20 @@ app.post('/login', function(req, res) {
 // var authenticated = passport.authenticate('basic', {session: false});
 // console.log(authenticated);
 });
-
+app.get('/posts', function(req, res) {
+  db.collection(POSTS_COLLECTION).find().toArray(function(err, items) {
+    res.status(201).json(items);
+  });
+});
+app.get('/posts/:id', function(req, res) {
+  db.collection(POSTS_COLLECTION).findOne({id: req.params.id}, function(err, results) {
+    if(err) {
+      handleError(res, err.message, 'Could not find Post');
+    } else {
+      res.status(201).json(results);
+    }
+  });
+});
 app.use(function(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
 
@@ -175,11 +189,7 @@ app.post('/post', function(req, res) {
     }
   });
 });
-app.get('/posts', function(req, res) {
-  db.collection(POSTS_COLLECTION).find().toArray(function(err, items) {
-    res.status(201).json(items);
-  });
-});
+
 app.delete('/posts/:id', function(req, res) {
   db.collection(POSTS_COLLECTION).deleteOne({id: req.params.id}, function(err, results) {
     if(err) {
@@ -189,15 +199,7 @@ app.delete('/posts/:id', function(req, res) {
     }
   })
 });
-app.get('/posts/:id', function(req, res) {
-  db.collection(POSTS_COLLECTION).findOne({id: req.params.id}, function(err, results) {
-    if(err) {
-      handleError(res, err.message, 'Could not find Post');
-    } else {
-      res.status(201).json(results);
-    }
-  });
-});
+
 app.post('/images', function(req, res) {
   var newImage = req.body;
   newImage.createdAt = new Date();
@@ -219,6 +221,27 @@ app.delete('/images/:id', function(req, res) {
       handleError(res, err.message, "Failed to delete contact");
     } else {
       res.status(204).end();
+    }
+  })
+});
+
+app.get('/frontpage', function(req, res) {
+  db.collection(FRONTPAGE_COLLECTION).find({}).toArray(function(err, docs) {
+    if(err) {
+      handleError(res, err.message, 'Failed to retrieve frontpage');
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
+app.post('/frontpage', function(req, res) {
+  var body = req.body;
+  db.collection(FRONTPAGE_COLLECTION).update({id: body.id}, body, {upsert: true}, function(err, result, upserted) {
+    if(err) {
+      handleError(res, err.message, 'Failed to create post');
+    } else {
+      //console.log(doc);
+      res.status(201).json(result);
     }
   })
 });

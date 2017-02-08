@@ -15,7 +15,12 @@ export const DELETE_PAGE_FAILURE = 'DELETE_PAGE_FAILURE';
 export const REQUEST_EDIT_PAGE = 'REQUEST_EDIT_PAGE';
 export const EDIT_PAGE_SUCCESS = 'EDIT_PAGE_SUCCESS';
 export const EDIT_PAGE_FAILURE = 'EDIT_PAGE_FAILURE';
-
+export const REQUEST_FRONTPAGE = 'REQUEST_FRONTPAGE';
+export const FRONTPAGE_SUCCESS = 'FRONTPAGE_SUCCESS';
+export const FRONTPAGE_FAILURE = 'FRONTPAGE_FAILURE';
+export const REQUEST_UPDATE_FRONTPAGE = 'REQUEST_UPDATE_FRONTPAGE';
+export const UPDATE_FRONTPAGE_SUCCESS = 'UPDATE_FRONTPAGE_SUCCESS';
+export const UPDATE_FRONTPAGE_FAILURE = 'UPDATE_FRONTPAGE_FAILURE';
 
 function requestPages() {
   return {
@@ -96,6 +101,87 @@ function editPageSuccess(id, json) {
     id: id,
     data: json,
   };
+}
+
+function requestFrontpage() {
+    return {
+      type: REQUEST_FRONTPAGE,
+    }
+}
+function frontpageFailure() {
+  return {
+    type: FRONTPAGE_FAILURE,
+  }
+}
+function frontpageSuccess(json) {
+  return {
+    type: FRONTPAGE_SUCCESS,
+    data: json,
+  }
+}
+function requestUpdateFrontpage() {
+  return {
+    type: REQUEST_UPDATE_FRONTPAGE,
+  }
+}
+
+function updateFrontpageFailure() {
+  return {
+    type: UPDATE_FRONTPAGE_FAILURE,
+  }
+}
+
+function updateFrontpageSuccess(json) {
+  return {
+    type: UPDATE_FRONTPAGE_SUCCESS,
+    data: json,
+  }
+}
+
+export function updateFrontpage(data) {
+
+  console.log(data);
+  return function (dispatch) {
+    dispatch(requestUpdateFrontpage());
+
+    return fetch(postURL + '/frontpage', {
+      method: 'POST',
+      body: data,
+      headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    }).then(response => response.json())
+    .then(json => {
+      if(json) {
+        dispatch(updateFrontpageSuccess(json));
+      } else {
+        dispatch(updateFrontpageFailure());
+      }
+    })
+  }
+}
+
+export function getFrontpage() {
+  return function (dispatch) {
+    dispatch(requestFrontpage());
+
+    return fetch(postURL + '/frontpage', {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+      },
+    }).then(response => response.json())
+    .then(json => {
+      if(json) {
+        dispatch(frontpageSuccess(json));
+
+      } else {
+        dispatch(frontpageFailure());
+      }
+    })
+  }
 }
 
 export function editPage(id) {

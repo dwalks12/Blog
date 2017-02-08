@@ -30,9 +30,13 @@ export default class ImagePage extends Component {
   }
   onImageDrop(files) {
     this.setState({
-      showModal: true,
       stateFile: files[0],
+      success: false,
+      loading: true,
+      uploadedFile: files[0],
     });
+    this.handleImageUpload(files[0]);
+
 
 
   }
@@ -41,7 +45,6 @@ export default class ImagePage extends Component {
       uploadedFile: this.state.stateFile,
       success: false,
       loading: true,
-      showModal: false,
     });
     this.handleImageUpload(this.state.stateFile);
   }
@@ -64,6 +67,9 @@ export default class ImagePage extends Component {
         }
         $.ajax({
           type: 'POST',
+          headers: {
+            'x-access-token': sessionStorage.getItem('jwtToken'),
+          },
           url: postURL + '/images',
           data: postData,
           success: this.handlePostSuccess(this),
@@ -155,19 +161,9 @@ export default class ImagePage extends Component {
   }
 	render() {
     const loadingSpinner = <div style={{display: this.state.loading ? 'inline-block' : 'none'}} className={css(styles.gradientWrapper)}>{'Uploading Image'}</div>
-    const CheckAuthModal = <section className={css(styles.modalContainer)} style={{display: this.state.showModal ? 'block' : 'none'}}>
-      <div className={css(styles.closeIcon)} onClick={() => this.closeModal()}></div>
-      <div className={css(styles.modalContent, this.state.incorrect ? styles.incorrectParams : '')}>
-        <h1 style={{marginBottom: '20px', marginTop: '25px'}}>{'Enter Login Credentials'}</h1>
-        <input value={this.state.usernameInput} onChange={this.updateUsernameValue.bind(this)} className={css(styles.inputField)} placeholder={'Username'} type='text'></input>
-        <input value={this.state.passwordInput} onChange={this.updatePasswordValue.bind(this)} className={css(styles.inputField)} placeholder={'Password'} type='password'></input>
-        <div className={css(styles.submitButton)} onClick={() => this.submitLoginCredentials()}>Submit</div>
-      </div>
-    </section>
 		return (
 			<div>
 				<Helmet title='Blog' />
-        {CheckAuthModal}
 				<div className={css(styles.dealerMetaContainer)}>
 					<h1 style={{fontFamily: 'futura'}}>{'Import Your image here'}</h1>
 				</div>

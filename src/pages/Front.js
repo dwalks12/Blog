@@ -1,16 +1,33 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { StyleSheet, css } from '../styling/index.js';
 import Helmet from 'react-helmet';
 import LazyLoad from 'react-lazy-load';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
-export default class FrontPage extends Component {
-	static propTypes = {}
+import {connect} from 'react-redux';
+import {getFrontpage} from '../actions/actions';
+class FrontPage extends Component {
+	static propTypes = {
+		data: PropTypes.any,
+	}
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			title: props.data.length > 0 ? props.data[0].title : '',
+			body: props.data.length > 0 ? props.data[0].body : '',
+			imageURL: props.data.length > 0 ? props.data[0].imageUrl : '',
+		}
 	}
 	componentDidMount() {
-		console.log(this.props);
+
+		this.props.getFrontpage();
+	}
+	componentWillReceiveProps(nextProps) {
+		this.setState({
+			title: nextProps.data.length > 0 ? nextProps.data[0].title : '',
+			body: nextProps.data.length > 0 ? nextProps.data[0].body : '',
+			imageURL: nextProps.data.length > 0 ? nextProps.data[0].imageUrl : '',
+		});
 	}
 
 	render() {
@@ -20,16 +37,26 @@ export default class FrontPage extends Component {
 
 				<div className={css(styles.dealerMetaContainer)}>
 					<LazyLoad>
-						<img className={css(styles.bannerImage)} src={'../images/Dawson.png'}/>
+						<img className={css(styles.bannerImage)} src={this.state.imageURL}/>
 					</LazyLoad>
-					<h1 className={css(styles.frontHeader)}>{'Beverly Walker'}</h1>
-					<p style={{fontFamily: 'futura',}}>{'A collection of thoughts and images, feel free to explore.'}</p>
+					<h1 className={css(styles.frontHeader)}>{this.state.title}</h1>
+					<p style={{fontFamily: 'futura',}}>{this.state.body}</p>
 				</div>
 
 			</div>
 		);
 	}
 }
+export default connect(
+	state => ({
+		data: state.rootReducer.getFrontpage.data,
+	}),
+	dispatch => ({
+		getFrontpage: () => {
+			dispatch(getFrontpage());
+		},
+	})
+)(FrontPage)
 
 const styles = StyleSheet.create({
 	dealerMetaContainer: {
@@ -45,7 +72,7 @@ const styles = StyleSheet.create({
 		marginBottom: '15px',
 	},
 	bannerImage: {
-		height: 'auto',
+		height: '600px',
 		width: 'auto',
 		maxHeight: '600px',
 		[`@media (max-width: ${ breakpoints.mdMin }px)`]: {
