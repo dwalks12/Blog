@@ -86,7 +86,15 @@ app.get('/images', function(req, res) {
     }
   });
 });
-
+app.get('/frontpage', function(req, res) {
+  db.collection(FRONTPAGE_COLLECTION).find({}).toArray(function(err, docs) {
+    if(err) {
+      handleError(res, err.message, 'Failed to retrieve frontpage');
+    } else {
+      res.status(200).json(docs);
+    }
+  });
+});
 app.post('/login', function(req, res) {
   var loginCredentials = req.body;
   var username = req.body.username;
@@ -225,15 +233,7 @@ app.delete('/images/:id', function(req, res) {
   })
 });
 
-app.get('/frontpage', function(req, res) {
-  db.collection(FRONTPAGE_COLLECTION).find({}).toArray(function(err, docs) {
-    if(err) {
-      handleError(res, err.message, 'Failed to retrieve frontpage');
-    } else {
-      res.status(200).json(docs);
-    }
-  });
-});
+
 app.post('/frontpage', function(req, res) {
   var body = req.body;
   db.collection(FRONTPAGE_COLLECTION).update({id: body.id}, body, {upsert: true}, function(err, result, upserted) {
