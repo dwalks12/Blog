@@ -93,7 +93,7 @@ export default class AdminPage extends Component {
       $.ajax({
         type: 'POST',
         url: postURL + '/login',
-        data: postData,
+        data: JSON.stringify(postData),
         contentType: 'application/json; charset=utf-8',
         success: this.handleLoginSuccess.bind(this),
         error: this.handleLoginFailure.bind(this),
