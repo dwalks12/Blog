@@ -94,6 +94,7 @@ export default class AdminPage extends Component {
         type: 'POST',
         url: postURL + '/login',
         data: postData,
+        contentType: 'application/json; charset=utf-8',
         success: this.handleLoginSuccess.bind(this),
         error: this.handleLoginFailure.bind(this),
         dataType: 'json',

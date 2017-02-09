@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
 		marginBottom: '15px',
 	},
 	bannerImage: {
-		height: '600px',
+		height: 'auto',
 		width: 'auto',
 		maxHeight: '600px',
 		[`@media (max-width: ${ breakpoints.mdMin }px)`]: {
