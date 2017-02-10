@@ -97,7 +97,7 @@ export default class AdminPage extends Component {
         contentType: 'application/json; charset=utf-8',
         success: this.handleLoginSuccess.bind(this),
         error: this.handleLoginFailure.bind(this),
-        dataType: 'jsonp',
+        dataType: 'json',
       });
 
     } else {
