@@ -56,9 +56,19 @@ class AdminPage extends Component {
           showModal: nextProps.success,
         });
         if(nextProps.data !== undefined && nextProps.data.token !== undefined) {
-          sessionStorage.setItem('jwtToken', nextProps.data.token);
+          isStorageSupported(nextProps.data.token);
+          // sessionStorage.setItem('jwtToken', nextProps.data.token);
           appHistory.replace('/contentpage');
         }
+      }
+    }
+  }
+  isStorageSupported(token) {
+    if(typeof sessionStorage === 'object') {
+      try {
+        sessionStorage.setItem('jwtToken', token);
+      } catch (e) {
+        alert('Your web browser does not support storing settings locally. In Safari, the most common cause of this is using "Private Browsing Mode". Some settings may not save or some features may not work properly for you.');
       }
     }
   }
