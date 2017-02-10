@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { css } from '../styling/index.js';
 import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
@@ -8,15 +8,18 @@ import { browserHistory } from 'react-router';
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 import $ from 'jquery';
 var bcrypt = require('bcrypt-nodejs');
-
-const CLOUDINARY_UPLOAD_PRESET = 'upload';
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/ddaohvlb0/upload';
+import {connect} from 'react-redux';
+import {login} from '../actions/actions';
 const URLS = require('../../models/config.js');
 const postURL =  URLS.globalUrl;
 
 import appHistory from '../utility/app_history';
 
-export default class AdminPage extends Component {
+class AdminPage extends Component {
+  static propTypes = {
+    data: PropTypes.any,
+    success: PropTypes.bool,
+  }
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   }
@@ -24,16 +27,40 @@ export default class AdminPage extends Component {
     super(props);
 
     this.state = {
-      uploadedFileCloudinaryUrl: '',
-      success: false,
+      success: props.success,
       loading: false,
       usernameInput: '',
       passwordInput: '',
       incorrect: false,
       showModal: true,
-      stateFile: {},
     };
 
+  }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps) {
+      if(!nextProps.success) {
+        this.setState({
+          incorrect: true,
+          loading: nextProps.loading,
+        });
+        var that = this;
+        setTimeout(function(){
+          that.setState({
+            incorrect: false,
+          });
+        }, 800);
+      } else {
+        this.setState({
+          success: nextProps.success,
+          loading: nextProps.loading,
+          showModal: nextProps.success,
+        });
+        if(nextProps.data !== undefined && nextProps.data.token !== undefined) {
+          sessionStorage.setItem('jwtToken', nextProps.data.token);
+          appHistory.replace('/contentpage');
+        }
+      }
+    }
   }
   componentDidMount() {
     if(sessionStorage.getItem('jwtToken')) {
@@ -42,35 +69,6 @@ export default class AdminPage extends Component {
       }
     }
   }
-  loginSuccess() {
-    this.setState({
-      success: false,
-      loading: false,
-      showModal: false,
-    });
-    appHistory.replace('/contentpage');
-  }
-
-  handleLoginSuccess(data) {
-    if(data) {
-
-      sessionStorage.setItem('jwtToken', data.token);
-      this.loginSuccess();
-    }
-  }
-  handleLoginFailure(error) {
-    this.setState({
-      incorrect: true,
-      loading: false,
-    });
-    var that = this;
-    setTimeout(function(){
-      that.setState({
-        incorrect: false,
-      });
-    }, 800);
-  }
-
   updateUsernameValue(e) {
     this.setState({
       usernameInput: e.target.value,
@@ -90,16 +88,7 @@ export default class AdminPage extends Component {
         username: this.state.usernameInput,
         password: this.state.passwordInput,
       }
-      $.ajax({
-        type: 'POST',
-        url: postURL + '/login',
-        data: JSON.stringify(postData),
-        contentType: 'application/json; charset=utf-8',
-        success: this.handleLoginSuccess.bind(this),
-        error: this.handleLoginFailure.bind(this),
-        dataType: 'json',
-      });
-
+      this.props.login(JSON.stringify(postData));
     } else {
       this.setState({
         incorrect: true,
@@ -137,3 +126,15 @@ export default class AdminPage extends Component {
 		);
 	}
 }
+export default connect(
+  state => ({
+    data: state.rootReducer.login.data,
+    success: !state.rootReducer.login.didFail,
+    loading: state.rootReducer.login.isFetching,
+  }),
+  dispatch => ({
+    login: (body) => {
+      dispatch(login(body));
+    }
+  })
+)(AdminPage);

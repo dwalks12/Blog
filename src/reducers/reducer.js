@@ -1,6 +1,6 @@
 // import {addPage, getData} from '../actions/actions';
 import {combineReducers} from 'redux';
-import {REQUEST_PAGES, RECEIVE_PAGES, REQUEST_PAGES_FAILURE, UPDATE_PAGE_SUCCESS, UPDATE_PAGE_FAILURE, REQUEST_UPDATE_PAGE, REQUEST_DELETE_PAGE, DELETE_PAGE_SUCCESS, DELETE_PAGE_FAILURE, EDIT_PAGE_SUCCESS, EDIT_PAGE_FAILURE, REQUEST_EDIT_PAGE, REQUEST_FRONTPAGE, FRONTPAGE_SUCCESS, FRONTPAGE_FAILURE, UPDATE_FRONTPAGE_SUCCESS, UPDATE_FRONTPAGE_FAILURE, REQUEST_UPDATE_FRONTPAGE} from '../actions/actions';
+import {REQUEST_PAGES, RECEIVE_PAGES, REQUEST_PAGES_FAILURE, UPDATE_PAGE_SUCCESS, UPDATE_PAGE_FAILURE, REQUEST_UPDATE_PAGE, REQUEST_DELETE_PAGE, DELETE_PAGE_SUCCESS, DELETE_PAGE_FAILURE, EDIT_PAGE_SUCCESS, EDIT_PAGE_FAILURE, REQUEST_EDIT_PAGE, REQUEST_FRONTPAGE, FRONTPAGE_SUCCESS, FRONTPAGE_FAILURE, UPDATE_FRONTPAGE_SUCCESS, UPDATE_FRONTPAGE_FAILURE, REQUEST_UPDATE_FRONTPAGE, REQUEST_LOGIN, LOGIN_SUCCESS, LOGIN_FAILURE} from '../actions/actions';
 
 function getPages(state = {
   isFetching: false,
@@ -179,6 +179,35 @@ function updateFrontpage(state = {
   }
 }
 
+function login(state = {
+  isFetching: false,
+  didFail: false,
+  data: [],
+}, action ) {
+  switch(action.type) {
+    case REQUEST_LOGIN:
+      return Object.assign({}, state, {
+        isFetching: true,
+      });
+
+    case LOGIN_SUCCESS:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didFail: false,
+        data: action.data,
+      });
+
+    case LOGIN_FAILURE:
+      return Object.assign({}, state, {
+        isFetching: false,
+        didFail: true,
+      });
+
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
   getPages,
   createPage,
@@ -186,6 +215,7 @@ const rootReducer = combineReducers({
   editPage,
   getFrontpage,
   updateFrontpage,
+  login,
 });
 
 export default rootReducer;

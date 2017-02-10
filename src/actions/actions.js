@@ -21,6 +21,9 @@ export const FRONTPAGE_FAILURE = 'FRONTPAGE_FAILURE';
 export const REQUEST_UPDATE_FRONTPAGE = 'REQUEST_UPDATE_FRONTPAGE';
 export const UPDATE_FRONTPAGE_SUCCESS = 'UPDATE_FRONTPAGE_SUCCESS';
 export const UPDATE_FRONTPAGE_FAILURE = 'UPDATE_FRONTPAGE_FAILURE';
+export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 
 function requestPages() {
   return {
@@ -138,6 +141,44 @@ function updateFrontpageSuccess(json) {
   }
 }
 
+function requestLogin() {
+  return {
+    type: REQUEST_LOGIN,
+  }
+}
+
+function loginFailure() {
+  return {
+    type: LOGIN_FAILURE,
+  }
+}
+function loginSuccess(json) {
+  return {
+    type: LOGIN_SUCCESS,
+    data: json,
+  }
+}
+export function login(data) {
+  console.log(data);
+  return function (dispatch) {
+    dispatch(requestLogin());
+    return fetch(postURL + '/login', {
+      method: 'POST',
+      body: data,
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+      },
+    }).then(response => response.json())
+    .then(json => {
+      if(json) {
+        dispatch(loginSuccess(json));
+      } else {
+        dispatch(updateFrontpageFailure());
+      }
+    })
+  }
+}
 export function updateFrontpage(data) {
 
   console.log(data);
