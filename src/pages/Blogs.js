@@ -10,6 +10,8 @@ const postURL = URLS.globalUrl;
 import {isTokenExpired, getTokenExpirationDate} from '../helpers/jwtHelper';
 import {connect} from 'react-redux';
 import {fetchPages} from '../actions/actions';
+import {merge,swing,rollOut,rotateIn, rotateOut, pulse, shake, flash, bounce, rubberBand, jello, tada, fadeOutRightBig} from 'react-animations';
+
 class Blogs extends Component {
 	static propTypes = {
     postId: PropTypes.string,
@@ -64,12 +66,12 @@ class Blogs extends Component {
   }
 	render() {
     const blogs = this.props.data && this.props.data.length > 0 ? this.props.data.map((item, index) => {
-      return (<a style={{cursor: 'pointer', textDecoration: 'none', color: 'black'}} href={postURL + '/#/post?id=' + item.id}><div className={css(styles.blogItem)} key={item.id}>
+      return (<a className={css(styles.shine)} style={{position: 'relative', cursor: 'pointer', textDecoration: 'none', color: 'black', border: '2px solid black', padding: '10px', margin: '5px'}} href={postURL + '/#/post?id=' + item.id}><div className={css(styles.blogItem)} key={item.id}>
               <LazyLoad>
                 <img className={css(styles.blogImage)} src={item.imageUrl} key={item.imageid} />
               </LazyLoad>
               <h1 key={item.id + '-title'} >{item.title}</h1>
-              <p key={item.id + '-body'} style={{maxWidth: '400px', wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>{item.body}</p>
+              <p className={css(styles.blogText)} key={item.id + '-body'} style={{maxWidth: '400px'}}>{item.body}</p>
         </div></a>);
     }) : <div></div>;
 
@@ -104,6 +106,14 @@ export default connect(
 )(Blogs)
 
 const styles = StyleSheet.create({
+	shine: {
+		':hover': {
+			animationName: pulse,
+	    animationDuration: '5s',
+	    animationIterationCount: '1000',
+		},
+
+	},
   blogGrid: {
     display: 'flex',
     justifyContent: 'center',
@@ -111,6 +121,32 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     fontFamily: 'futura',
   },
+	blogText: {
+		overflow: 'hidden',
+		position: 'relative',
+		lineHeight: '1.4em',
+		maxHeight: '4.2em',
+		textAlign: 'justify',
+		marginRight: '-1em',
+		paddingRight: '1em',
+
+		':before': {
+			content: '"..."',
+			position: 'absolute',
+			right: '0',
+			bottom: '0',
+		},
+		':after': {
+			content: '""',
+			position: 'absolute',
+			right: '0',
+			width: '1em',
+			height: '1em',
+			marginTop: '0.2em',
+			background: 'white',
+
+		}
+	},
   blogItem: {
     maxWidth: '400px',
     margin: '10px',

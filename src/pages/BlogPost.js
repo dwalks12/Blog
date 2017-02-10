@@ -98,7 +98,7 @@ class BlogPost extends Component {
                 <img className={css(styles.blogImage)} src={item.imageUrl} key={item.imageid} />
               </LazyLoad>
               <h1 key={item.id + '-title'} >{item.title}</h1>
-              <p key={item.id + '-body'} style={{maxWidth: '400px', wordWrap: 'break-word', whiteSpace: 'pre-wrap'}}>{item.body}</p>
+              <p className={css(styles.blogText)} key={item.id + '-body'} style={{maxWidth: '400px'}}>{item.body}</p>
               <a style={{textDecoration: 'none', fontFamily: 'futura'}} href={postURL + '/#/post?id=' + item.id}>Link to blog</a>
               <div key={item.id + '-delete'} style={{cursor: 'pointer'}} onClick={() => this.deleteBlogPost(item.id, index)}>{'Delete '}<i className="material-icons">&#xE872;</i></div>
               <div key={item.id + '-edit'} style={{cursor: 'pointer'}} onClick={() => this.editBlogPost(item.id, index)}>{'Edit '}<i className="material-icons">&#xE254;</i></div>
@@ -151,6 +151,32 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     fontFamily: 'futura',
   },
+	blogText: {
+		overflow: 'hidden',
+		position: 'relative',
+		lineHeight: '1.4em',
+		maxHeight: '4.2em',
+		textAlign: 'justify',
+		marginRight: '-1em',
+		paddingRight: '1em',
+
+		':before': {
+			content: '"..."',
+			position: 'absolute',
+			right: '0',
+			bottom: '0',
+		},
+		':after': {
+			content: '""',
+			position: 'absolute',
+			right: '0',
+			width: '1em',
+			height: '1em',
+			marginTop: '0.2em',
+			background: 'white',
+
+		}
+	},
   blogItem: {
     maxWidth: '400px',
     margin: '10px',

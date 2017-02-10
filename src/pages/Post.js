@@ -76,7 +76,9 @@ export default class Post extends Component {
 						<img className={css(styles.bannerImage)} src={this.state.imageUrl}/>
 					</LazyLoad>
 					<h1 className={css(styles.frontHeader)}>{this.state.title}</h1>
-					<p style={{fontFamily: 'futura',}}>{this.state.body}</p>
+					<div className={css(styles.bodyDiv)}>
+					<p style={{fontFamily: 'futura', maxWidth: '100%', wordWrap: 'break-word', whiteSpace: 'pre-wrap', textAlign: 'left'}}>{this.state.body}</p>
+					</div>
 				</div>
 			</div>
 		);
@@ -84,6 +86,11 @@ export default class Post extends Component {
 }
 
 const styles = StyleSheet.create({
+	bodyDiv: {
+		width: '90%',
+		margin: 'auto',
+		textAlign: 'center',
+	},
 	dealerMetaContainer: {
 		marginTop: '0.5rem',
 		marginBottom: '10px',
