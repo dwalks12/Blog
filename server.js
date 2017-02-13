@@ -104,7 +104,7 @@ app.post('/login', function(req, res) {
   var loginCredentials = req.body;
   var username = req.body.username;
   var password = req.body.password;
-  console.log(username, password);
+
   //res.status(201).json({'success': true});
 
 

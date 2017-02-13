@@ -101,7 +101,7 @@ export default class ImagePage extends Component {
     }
   }
   handleLoginFailure(error) {
-    console.log(error);
+
     this.setState({
       incorrect: true,
     });
@@ -113,7 +113,7 @@ export default class ImagePage extends Component {
     }, 800);
   }
   handlePostFailure(error) {
-    console.log(error);
+
 
   }
   updateUsernameValue(e) {
@@ -142,7 +142,7 @@ export default class ImagePage extends Component {
       });
 
     } else {
-      console.log('hello');
+
       this.setState({
         incorrect: true,
       });

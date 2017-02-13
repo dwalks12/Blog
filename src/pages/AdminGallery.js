@@ -56,7 +56,7 @@ export default class AdminGallery extends Component {
   }
 
   handlePostError(err) {
-    console.log(err);
+
   }
   handleDeleteSuccess( theIndex) {
     var tempArray = this.state.imageUrls.filter(function(el, index) {
@@ -67,7 +67,7 @@ export default class AdminGallery extends Component {
     })
   }
   handleDeleteError(err) {
-    console.log(err);
+
   }
   deleteImage(imageId, index) {
     this.setState({
@@ -151,7 +151,7 @@ export default class AdminGallery extends Component {
   renderImages(images) {
     if(images.length > 0) {
       return images.map((images, index) => {
-        console.log(images);
+
         return (<div key={`${index}-div1`}><div key={`${index}-div3`} className={css(styles.closeIcon)} onClick={() => this.handleDelete(images._id, index)}></div><LazyLoad className={css(styles.marginIt)} height={300} offsetBottom={10}><img className={css(styles.galleryImages)} src={images.imageUrl} key={index} ></img></LazyLoad></div>
       )})
     } else {

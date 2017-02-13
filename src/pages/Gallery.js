@@ -51,7 +51,7 @@ export default class GalleryPage extends Component {
   }
 
   handlePostError(err) {
-    console.log(err);
+
   }
   handleDeleteSuccess( theIndex) {
     var tempArray = this.state.imageUrls.filter(function(el, index) {
@@ -62,7 +62,7 @@ export default class GalleryPage extends Component {
     })
   }
   handleDeleteError(err) {
-    console.log(err);
+
   }
   deleteImage(imageId, index) {
     this.setState({
