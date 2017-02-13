@@ -184,12 +184,11 @@ export function getImages() {
     dispatch(requestImages());
     return fetch(postURL + '/getImages', {
       method: 'GET',
-      headers: {
-        'x-access-token': sessionStorage.getItem('jwtToken'),
-      },
+
+      dataType: 'json'
     }).then(response => response.json())
     .then(json => {
-      if(json.success) {
+      if(json) {
         dispatch(imagesSuccess(json));
       } else {
         dispatch(imagesFailure());
