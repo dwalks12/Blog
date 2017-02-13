@@ -41,7 +41,7 @@ export default class AddPage extends Component {
   }
   componentDidMount() {
     if(sessionStorage.getItem('jwtToken')) {
-      console.log('session still valid');
+
     } else {
       appHistory.replace('/admin');
     }
@@ -65,7 +65,7 @@ export default class AddPage extends Component {
     });
   }
   handleEditSuccess(data) {
-    console.log(data);
+
     this.setState({
       imageUrl: data.imageUrl,
       title: data.title,
@@ -103,7 +103,7 @@ export default class AddPage extends Component {
     this.handleImageUpload(file);
   }
   handleImageUpload(file) {
-    console.log(this.state.stateFile);
+
     let upload = request.post(CLOUDINARY_UPLOAD_URL)
                         .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
                         .field('file', file);
@@ -179,7 +179,7 @@ export default class AddPage extends Component {
     this.setState({error: false,});
   }
   viewBlogPost(id) {
-    console.log('Go to blog post ', id);
+		
   }
 	render() {
     const loadingSpinner = this.state.loading || this.state.submitting ? <span><img className={css(styles.loading)} src='../images/loading.gif'/></span> : this.state.preSelectedId.length > 0 ? 'Update' : 'Upload';

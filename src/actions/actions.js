@@ -159,7 +159,7 @@ function loginSuccess(json) {
   }
 }
 export function login(data) {
-  console.log(data);
+
   return function (dispatch) {
     dispatch(requestLogin());
     return fetch(postURL + '/login', {
@@ -181,7 +181,7 @@ export function login(data) {
 }
 export function updateFrontpage(data) {
 
-  console.log(data);
+
   return function (dispatch) {
     dispatch(requestUpdateFrontpage());
 
