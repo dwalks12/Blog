@@ -1,17 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { StyleSheet, css } from '../styling/index.js';
 import Helmet from 'react-helmet';
 import LazyLoad from 'react-lazy-load';
 import { breakpoints, marginsAtWidth, webFonts } from '../styling/variables';
 import {merge,swing,rollOut,rotateIn, rotateOut, pulse,shake, flash, bounce, rubberBand, jello} from 'react-animations';
 import $ from 'jquery';
+import {connect} from 'react-redux';
+import {getImages} from '../actions/actions';
 const closeanimation = merge(rotateOut, rotateIn);
 const animation = merge(rotateOut, rotateIn);
 const URLS = require('../../models/config.js');
 const postURL = URLS.globalUrl;
+
 //const postURL = 'https://beverlywalker.herokuapp.com'; // for local testing.'http://localhost:3000';//
-export default class GalleryPage extends Component {
-	static propTypes = {}
+class GalleryPage extends Component {
+	static propTypes = {
+		images: PropTypes.any,
+		success: PropTypes.bool,
+		loading: PropTypes.bool,
+	}
+	static contextTypes = {
+		router: PropTypes.object.isRequired,
+	}
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,37 +35,23 @@ export default class GalleryPage extends Component {
     };
 
   }
+
+	componentWillReceiveProps(nextProps) {
+
+		if(nextProps.images.length > 0) {
+			var urls = [];
+			for(var item in nextProps.images) {
+				urls.push(nextProps.images[item]);
+			}
+
+			this.setState({
+				imageUrls: urls,
+			});
+		}
+	}
   componentDidMount() {
-    this.getImages();
-  }
-
-  getImages() {
-    $.ajax({
-      type: 'GET',
-      url: postURL + '/images',
-			headers: {
-        'x-access-token': sessionStorage.getItem('jwtToken'),
-      },
-      success: this.handlePostSuccess.bind(this),
-      error: this.handlePostError.bind(this),
-      dataType: 'json',
-    });
-  }
-  handlePostSuccess(data) {
-    if(data.length > 0) {
-      var urls = [];
-      for(var item in data) {
-        urls.push(data[item]);
-      }
-
-      this.setState({
-        imageUrls: urls,
-      });
-    }
-  }
-
-  handlePostError(err) {
-
+    // this.getImages();
+		this.props.getImages();
   }
 
   closeModal() {
@@ -85,6 +82,18 @@ export default class GalleryPage extends Component {
 		);
 	}
 }
+export default connect(
+	state => ({
+		images: state.rootReducer.images.data,
+		success: !state.rootReducer.images.didFail,
+		loading: state.rootReducer.images.isFetching,
+	}),
+	dispatch => ({
+		getImages: () => {
+			dispatch(getImages());
+		}
+	})
+)(GalleryPage);
 
 const styles = StyleSheet.create({
   modalContainer: {

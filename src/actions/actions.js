@@ -24,6 +24,9 @@ export const UPDATE_FRONTPAGE_FAILURE = 'UPDATE_FRONTPAGE_FAILURE';
 export const REQUEST_LOGIN = 'REQUEST_LOGIN';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const REQUEST_IMAGES = 'REQUEST_IMAGES';
+export const IMAGES_SUCCESS = 'IMAGES_SUCCESS';
+export const IMAGES_FAILURE = 'IMAGES_FAILURE';
 
 function requestPages() {
   return {
@@ -156,6 +159,42 @@ function loginSuccess(json) {
   return {
     type: LOGIN_SUCCESS,
     data: json,
+  }
+}
+
+function requestImages() {
+  return {
+    type: REQUEST_IMAGES,
+  }
+}
+function imagesFailure() {
+  return {
+    type: IMAGES_FAILURE,
+  }
+}
+function imagesSuccess(json) {
+  return {
+    type: IMAGES_SUCCESS,
+    data: json,
+  }
+}
+
+export function getImages() {
+  return function (dispatch) {
+    dispatch(requestImages());
+    return fetch(postURL + '/getImages', {
+      method: 'GET',
+      headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+      },
+    }).then(response => response.json())
+    .then(json => {
+      if(json.success) {
+        dispatch(imagesSuccess(json));
+      } else {
+        dispatch(imagesFailure());
+      }
+    })
   }
 }
 export function login(data) {

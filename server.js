@@ -77,19 +77,20 @@ function handleError(res, reason, message, code) {
   res.status(code || 500).json({'error': reason});
 }
 
-app.get('/images', function(req, res) {
-  db.collection(IMAGES_COLLECTION).find({}).toArray(function(err, docs) {
+
+app.get('/frontpage', function(req, res) {
+  db.collection(FRONTPAGE_COLLECTION).find({}).toArray(function(err, docs) {
     if(err) {
-      handleError(res, err.message, 'Failed to retrieve images');
+      handleError(res, err.message, 'Failed to retrieve frontpage');
     } else {
       res.status(200).json(docs);
     }
   });
 });
-app.get('/frontpage', function(req, res) {
-  db.collection(FRONTPAGE_COLLECTION).find({}).toArray(function(err, docs) {
+app.get('/getImages', function(req, res) {
+  db.collection(IMAGES_COLLECTION).find().toArray(function(err, docs) {
     if(err) {
-      handleError(res, err.message, 'Failed to retrieve frontpage');
+      handleError(res, err.message, 'Failed to retrieve images');
     } else {
       res.status(200).json(docs);
     }
