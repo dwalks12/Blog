@@ -37,6 +37,9 @@ export default class AdminGallery extends Component {
     $.ajax({
       type: 'GET',
       url: postURL + '/images',
+			headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+      },
       success: this.handlePostSuccess.bind(this),
       error: this.handlePostError.bind(this),
       dataType: 'json',

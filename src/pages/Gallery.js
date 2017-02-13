@@ -32,6 +32,9 @@ export default class GalleryPage extends Component {
     $.ajax({
       type: 'GET',
       url: postURL + '/images',
+			headers: {
+        'x-access-token': sessionStorage.getItem('jwtToken'),
+      },
       success: this.handlePostSuccess.bind(this),
       error: this.handlePostError.bind(this),
       dataType: 'json',
@@ -53,90 +56,7 @@ export default class GalleryPage extends Component {
   handlePostError(err) {
 
   }
-  handleDeleteSuccess( theIndex) {
-    var tempArray = this.state.imageUrls.filter(function(el, index) {
-      return index !== theIndex;
-    });
-    this.setState({
-      imageUrls: tempArray,
-    })
-  }
-  handleDeleteError(err) {
 
-  }
-  deleteImage(imageId, index) {
-    this.setState({
-      showModal: true,
-      imageId: imageId,
-      imageIndex: index,
-    });
-
-  }
-  handleDelete() {
-    this.setState({
-      showModal: false,
-    });
-    $.ajax({
-      type: 'DELETE',
-      url: postURL+ '/images/' + this.state.imageId,
-      success: this.handleDeleteSuccess.bind(this, this.state.imageIndex),
-      error: this.handleDeleteError.bind(this),
-      dataType: 'json',
-    });
-  }
-  updateUsernameValue(e) {
-    this.setState({
-      usernameInput: e.target.value,
-    });
-  }
-  updatePasswordValue(e) {
-    this.setState({
-      passwordInput: e.target.value,
-    });
-  }
-  handleLoginSuccess(data) {
-    if(data) {
-      this.handleDelete();
-    }
-  }
-  handleLoginFailure(error) {
-    this.setState({
-      incorrect: true,
-    });
-    var that = this;
-    setTimeout(function(){
-      that.setState({
-        incorrect: false,
-      });
-    }, 800);
-  }
-  submitLoginCredentials() {
-    if(this.state.usernameInput.length > 0 && this.state.passwordInput.length > 0) {
-      var postData = {
-        username: this.state.usernameInput,
-        password: this.state.passwordInput,
-      }
-      $.ajax({
-        type: 'POST',
-        url: postURL + '/login',
-        data: postData,
-        success: this.handleLoginSuccess.bind(this),
-        error: this.handleLoginFailure.bind(this),
-        dataType: 'json',
-      });
-
-    } else {
-      this.setState({
-        incorrect: true,
-      });
-      var that = this;
-      setTimeout(function(){
-        that.setState({
-          incorrect: false,
-        });
-      }, 800);
-    }
-  }
   closeModal() {
     this.setState({
       showModal: false,
@@ -153,15 +73,6 @@ export default class GalleryPage extends Component {
   }
 	render() {
     const images = this.renderImages(this.state.imageUrls);
-    const CheckAuthModal = <section className={css(styles.modalContainer)} style={{display: this.state.showModal ? 'block' : 'none'}}>
-      <div className={css(styles.closeIconLogin)} onClick={() => this.closeModal()}></div>
-      <div className={css(styles.modalContent, this.state.incorrect ? styles.incorrectParams : '')}>
-        <h1 style={{marginBottom: '20px', marginTop: '25px'}}>{'Enter Login Credentials'}</h1>
-        <input value={this.state.usernameInput} onChange={this.updateUsernameValue.bind(this)} className={css(styles.inputField)} placeholder={'Username'} type='text'></input>
-        <input value={this.state.passwordInput} onChange={this.updatePasswordValue.bind(this)} className={css(styles.inputField)} placeholder={'Password'} type='password'></input>
-        <div className={css(styles.submitButton)} onClick={() => this.submitLoginCredentials()}>Submit</div>
-      </div>
-    </section>
 		return (
 			<div>
 				<Helmet title='Gallery' />
