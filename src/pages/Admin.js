@@ -56,7 +56,7 @@ class AdminPage extends Component {
           showModal: nextProps.success,
         });
         if(nextProps.data !== undefined && nextProps.data.token !== undefined) {
-          isStorageSupported(nextProps.data.token);
+          this.isStorageSupported(nextProps.data.token);
           // sessionStorage.setItem('jwtToken', nextProps.data.token);
           appHistory.replace('/contentpage');
         }
