@@ -38,7 +38,7 @@ export default class Post extends Component {
     });
   }
   handleEditSuccess(data) {
-    console.log(data);
+
     if(data) {
       this.setState({
         imageUrl: data.imageUrl,

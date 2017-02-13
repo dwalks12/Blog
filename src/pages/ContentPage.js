@@ -44,7 +44,7 @@ class ContentPage extends Component {
     }
   }
 	componentWillReceiveProps(nextProps) {
-		console.log(nextProps);
+
 		this.setState({
 			title: nextProps.data.length > 0 ? nextProps.data[0].title : '',
 			body: nextProps.data.length > 0 ? nextProps.data[0].body : '',
@@ -73,7 +73,7 @@ class ContentPage extends Component {
     } else {
       appHistory.replace('/admin');
     }
-		console.log('how many times here');
+
   }
   handleTitleChange(title) {
 		this.setState({
@@ -117,7 +117,7 @@ class ContentPage extends Component {
     }
   }
   onImageDrop(files) {
-    console.log(files[0]);
+
 		let upload = request.post(CLOUDINARY_UPLOAD_URL)
                         .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
                         .field('file', files[0]);

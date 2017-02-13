@@ -114,7 +114,7 @@ export default class Base extends Component {
 	}
 	render() {
 		const {store} = this.context;
-		// console.log(store.getState());
+
 		const storeState = store.getState();
 		const getMenuChange = this.checkStateChange(storeState);
 		// this.checkStateChange(storeState);

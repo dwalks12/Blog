@@ -86,7 +86,7 @@ export default class ImagePage extends Component {
   }
 
   handlePostSuccess(data) {
-    console.log(data);
+
     if(data) {
       this.setState({
         success: true,
@@ -95,7 +95,7 @@ export default class ImagePage extends Component {
     }
   }
   handleLoginSuccess(data) {
-    console.log(data);
+
     if(data) {
       this.canUploadImage();
     }
