@@ -2,6 +2,9 @@
   "name": "blog",
   "version": "1.0.0",
   "description": "Eurotrip",
+  "engines":{
+    "node": "7.10.1"
+  },
   "scripts": {
     "start": "node server",
     "postinstall": "node deploy",
