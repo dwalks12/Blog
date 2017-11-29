@@ -15,7 +15,6 @@ if [ -z $OUTPUT_FOLDER ]; then
 	exit -1;
 fi
 
-yarn
 
 npm run build
 
